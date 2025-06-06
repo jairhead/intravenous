@@ -1,0 +1,29 @@
+## intravenous .gitignore file
+## Ignore VS Code temp files
+
+# User files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS Code files
+.vscode
+*.pdb
+*.[Cc]ache
+*.nuget.g.props
+*.nuget.g.targets
+*.GeneratedMSBuildEditorConfig.editorconfig
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
