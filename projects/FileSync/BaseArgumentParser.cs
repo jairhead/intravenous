@@ -38,7 +38,7 @@ namespace ArgumentParsers
                 else if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
                          !args.ContainsKey(inputArgs[i]))
                 {
-                    args.Add(inputArgs[i], "NA");
+                    args.Add(inputArgs[i], "-");
                 }
                 else
                 {

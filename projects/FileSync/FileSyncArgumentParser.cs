@@ -34,58 +34,40 @@ namespace ArgumentParsers
             {
                 return;
             }
-
-            // Otherwise, extract arguments
-            for (int i = 0; i < inputArgs.Length - 2; i++)
-            {
-                if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
-                    whiteList.Contains(inputArgs[i].Remove(0, 1) + ":") && !args.ContainsKey(inputArgs[i]) &&
-                    checkArgVal(inputArgs, i))
-                {
-                    args.Add(inputArgs[i], inputArgs[i + 1]);
-                    i++;
-                }
-                else if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
-                         !args.ContainsKey(inputArgs[i]))
-                {
-                    args.Add(inputArgs[i], "NA");
-                }
-                else
-                {
-                    continue;
-                }
-            }
+            
+            // Call super
+            base.extractArgs(inputArgs, whiteList);
 
             // Set source dir
-            if (!setSrc(inputArgs))
+            if (!setSrc(inputArgs[inputArgs.Length - 2]))
             {
                 throw new DirectoryNotFoundException("Source directory is invalid!");
             }
 
             // Set dest dir
-            if (!setDest(inputArgs))
+            if (!setDest(inputArgs[inputArgs.Length - 1]))
             {
                 throw new DirectoryNotFoundException("Destination directory is invalid!");
             }
         }
 
         // Source directory setter
-        private bool setSrc(string[] inputArgs)
+        private bool setSrc(string dir)
         {
-            if (Directory.Exists(inputArgs[inputArgs.Length - 2]))
+            if (Directory.Exists(dir))
             {
-                src = inputArgs[inputArgs.Length - 2];
+                src = dir;
                 return true;
             }
             return false;
         }
 
         // Destination directory setter
-        private bool setDest(string[] inputArgs)
+        private bool setDest(string dir)
         {
-            if (Directory.Exists(inputArgs[inputArgs.Length - 1]))
+            if (Directory.Exists(dir))
             {
-                dest = inputArgs[inputArgs.Length - 1];
+                dest = dir;
                 return true;
             }
             return false;
