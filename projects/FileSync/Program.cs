@@ -6,17 +6,25 @@ class FileSync
 {
     static void Main(string[] args)
     {
-        // Entry statement
+        // Entry
         Console.WriteLine("FileSync::Main(): Start");
 
         // I.) Gather Input Args
-        BaseArgumentParser parser = new BaseArgumentParser(args, "abcd:ef:gh");
+        FileSyncArgumentParser parser;
+        try
+        {
+            parser = new FileSyncArgumentParser(args, "abcd:ef:gh");
+        }
+        catch (DirectoryNotFoundException e)
+        {
+            Console.WriteLine($"FileSync::Main(): {e.Message}");
+        }
 
         // II.) Begin File Sync Threads
 
         // III.) Delete
 
-        // Exit statement
+        // Exit
         Console.WriteLine("FileSync::Main(): End");
         Environment.Exit(0);
     }

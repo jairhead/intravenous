@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 
 namespace ArgumentParsers
 {
-    class BaseArgumentParser
+    public class BaseArgumentParser
     {
         //  Internal variables
-        Dictionary<string, string> args = new Dictionary<string, string>();
+        protected Dictionary<string, string> args = new Dictionary<string, string>();
 
         // Constructor
         public BaseArgumentParser(string[] inputArgs, string whiteList)
@@ -17,19 +17,23 @@ namespace ArgumentParsers
         }
 
         // Overloadable extractArgs method
-        private void extractArgs(string[] inputArgs, string whiteList)
+        protected void extractArgs(string[] inputArgs, string whiteList)
         {
+            // Immediately return if no args
+            if (inputArgs.Length == 0)
+            {
+                return;
+            }
+
+            // Otherwise, extract arguments
             for (int i = 0; i < inputArgs.Length; i++)
             {
                 if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
-                    whiteList.Contains(inputArgs[i].Remove(0, 1) + ":") && !args.ContainsKey(inputArgs[i]))
+                    whiteList.Contains(inputArgs[i].Remove(0, 1) + ":") && !args.ContainsKey(inputArgs[i]) &&
+                    checkArgVal(inputArgs, i))
                 {
-                    // Handle scenario where no value is provided
-                    if (checkArgVal(inputArgs, i))
-                    {
-                        args.Add(inputArgs[i], inputArgs[i + 1]);
-                        i++;
-                    }
+                    args.Add(inputArgs[i], inputArgs[i + 1]);
+                    i++;
                 }
                 else if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
                          !args.ContainsKey(inputArgs[i]))
@@ -44,7 +48,7 @@ namespace ArgumentParsers
         }
 
         // Checks to see if a value was provided
-        private bool checkArgVal(string[] inputArgs, int i)
+        protected bool checkArgVal(string[] inputArgs, int i)
         {
             // Handle scenario where no value is provided
             if (i + 1 >= inputArgs.Length)
