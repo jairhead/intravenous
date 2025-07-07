@@ -32,9 +32,10 @@ namespace ArgumentParsers
             // Immediately return if no args
             if (inputArgs.Length == 0)
             {
+                throw new ArgumentException("Source and destination directories must be provided!");
                 return;
             }
-            
+
             // Call super
             base.extractArgs(inputArgs, whiteList);
 

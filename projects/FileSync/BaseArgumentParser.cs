@@ -13,7 +13,14 @@ namespace ArgumentParsers
         // Constructor
         public BaseArgumentParser(string[] inputArgs, string whiteList)
         {
-            extractArgs(inputArgs, whiteList);
+            try
+            {
+                extractArgs(inputArgs, whiteList);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         // Overloadable extractArgs method
@@ -42,6 +49,7 @@ namespace ArgumentParsers
                 }
                 else
                 {
+                    throw new ArgumentException("Invalid argument: " + inputArgs[i]);
                     continue;
                 }
             }
