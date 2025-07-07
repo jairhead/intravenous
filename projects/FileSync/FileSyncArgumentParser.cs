@@ -29,37 +29,38 @@ namespace ArgumentParsers
 
             base.parseArgs();
 
-            if (!setSrc(input[input.Length - 2]))
+            try
             {
-                throw new DirectoryNotFoundException("Source directory is invalid!");
-            }
+                setSrc(input[input.Length - 2]);
+                setDest(input[input.Length - 1]);
 
-            if (!setDest(input[input.Length - 1]))
+            }
+            catch (Exception e)
             {
-                throw new DirectoryNotFoundException("Destination directory is invalid!");
+                throw;
             }
         }
 
         // Source directory setter
-        private bool setSrc(string dir)
+        private void setSrc(string dir)
         {
             if (Directory.Exists(dir))
             {
                 src = dir;
-                return true;
+                return;
             }
-            return false;
+            throw new DirectoryNotFoundException("Source directory is invalid!");
         }
 
         // Destination directory setter
-        private bool setDest(string dir)
+        private void setDest(string dir)
         {
             if (Directory.Exists(dir))
             {
                 dest = dir;
-                return true;
+                return;
             }
-            return false;
+            throw new DirectoryNotFoundException("Destination directory is invalid!");
         }
 
         // Source directory getter
