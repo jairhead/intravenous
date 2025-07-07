@@ -1,52 +1,40 @@
-// ArgumentParser.cs
-// Contains the ArgumentParser class
+// FileSyncArgumentParser.cs
+// Contains the FileSyncArgumentParser class
 using System;
 using System.ComponentModel;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
-
+using System.Security.Cryptography.X509Certificates;
 namespace ArgumentParsers
 {
     public class FileSyncArgumentParser : BaseArgumentParser
     {
         // Source and destination directories
-        protected string src;
-        protected string dest;
+        protected string? src = null;
+        protected string? dest = null;
 
         // Base Constructor
         public FileSyncArgumentParser(string[] inputArgs, string whiteList) : base(inputArgs, whiteList)
         {
-            try
-            {
-                extractArgs(inputArgs, whiteList);
-            }
-            catch
-            {
-                throw;
-            }
+
         }
 
         // Overloadable extractArgs method
-        private void extractArgs(string[] inputArgs, string whiteList)
+        public void parseArgs()
         {
-            // Immediately return if no args
-            if (inputArgs.Length == 0)
+            if (input.Length == 0)
             {
                 throw new ArgumentException("Source and destination directories must be provided!");
-                return;
             }
 
-            // Call super
-            base.extractArgs(inputArgs, whiteList);
+            base.parseArgs();
 
-            // Set source dir
-            if (!setSrc(inputArgs[inputArgs.Length - 2]))
+            if (!setSrc(input[input.Length - 2]))
             {
                 throw new DirectoryNotFoundException("Source directory is invalid!");
             }
 
-            // Set dest dir
-            if (!setDest(inputArgs[inputArgs.Length - 1]))
+            if (!setDest(input[input.Length - 1]))
             {
                 throw new DirectoryNotFoundException("Destination directory is invalid!");
             }
@@ -77,13 +65,21 @@ namespace ArgumentParsers
         // Source directory getter
         public string getSrc()
         {
-            return src;
+            if (src != null)
+            {
+                return src;
+            }
+            throw new NullReferenceException("Source directory is null!");
         }
 
         // Destination directory getter
         public string getDest()
         {
-            return dest;
+            if (dest != null)
+            {
+                return dest;
+            }
+            throw new NullReferenceException("Destination directory is null!");
         }
     }
 }

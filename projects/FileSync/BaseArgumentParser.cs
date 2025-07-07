@@ -1,5 +1,5 @@
-// ArgumentParser.cs
-// Contains the ArgumentParser class
+// BaseArgumentParser.cs
+// Contains the BaseArgumentParser class
 using System;
 using System.Runtime.InteropServices;
 
@@ -9,48 +9,46 @@ namespace ArgumentParsers
     {
         //  Internal variables
         protected Dictionary<string, string> args = new Dictionary<string, string>();
+        protected string[] input;
+        protected string allowedArgs;
+
 
         // Constructor
         public BaseArgumentParser(string[] inputArgs, string whiteList)
         {
-            try
-            {
-                extractArgs(inputArgs, whiteList);
-            }
-            catch
-            {
-                throw;
-            }
+            input = inputArgs;
+            allowedArgs = whiteList;
         }
 
         // Overloadable extractArgs method
-        protected void extractArgs(string[] inputArgs, string whiteList)
+        public void parseArgs()
         {
-            // Immediately return if no args
-            if (inputArgs.Length == 0)
+            if (input.Length == 0)
             {
                 return;
             }
 
-            // Otherwise, extract arguments
-            for (int i = 0; i < inputArgs.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
-                    whiteList.Contains(inputArgs[i].Remove(0, 1) + ":") && !args.ContainsKey(inputArgs[i]) &&
-                    checkArgVal(inputArgs, i))
+                if (input[i].Contains('-') && allowedArgs.Contains(input[i].Remove(0, 1)) &&
+                    allowedArgs.Contains(input[i].Remove(0, 1) + ":") &&
+                    checkArgVal(input, i))
                 {
-                    args.Add(inputArgs[i], inputArgs[i + 1]);
+                    countOccurrences(input[i]);
+                    args.Add(input[i], input[i + 1]);
                     i++;
                 }
-                else if (inputArgs[i].Contains('-') && whiteList.Contains(inputArgs[i].Remove(0, 1)) &&
-                         !args.ContainsKey(inputArgs[i]))
+                else if (input[i].Contains('-') && allowedArgs.Contains(input[i].Remove(0, 1)))
                 {
-                    args.Add(inputArgs[i], "-");
-                }
-                else
-                {
-                    throw new ArgumentException("Invalid argument: " + inputArgs[i]);
-                    continue;
+                    int count = countOccurrences(input[i]);
+                    if (count >= 1)
+                    {
+                        args.Add(input[i] + count.ToString(), "-");
+                    }
+                    else
+                    {
+                        args.Add(input[i], "-");
+                    }
                 }
             }
         }
@@ -58,16 +56,29 @@ namespace ArgumentParsers
         // Checks to see if a value was provided
         protected bool checkArgVal(string[] inputArgs, int i)
         {
-            // Handle scenario where no value is provided
-            if (i + 1 >= inputArgs.Length)
+            if (i+1 >= inputArgs.Length)
             {
                 return false;
             }
-            else if (inputArgs[i + 1].Contains('-'))
+            else if (inputArgs[i+1].Contains('-'))
             {
                 return false;
             }
             return true;
+        }
+
+        // Count number of times an argument has been stored
+        protected int countOccurrences(string key)
+        {
+            int count = 0;
+            foreach (KeyValuePair<string, string> entry in args)
+            {
+                if (entry.Key.Contains(key))
+                {
+                    count++;
+                }
+            }
+            return count;
         }
 
         // Return the arguments extracted

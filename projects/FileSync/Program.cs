@@ -5,8 +5,8 @@ using ArgumentParsers;
 class FileSync
 {
     // Globals
-    bool fileSync = true;
-    bool copyFiles = false;
+    static bool fileSync = true;
+    static bool copyFiles = false;
 
     // Main
     static void Main(string[] args)
@@ -15,11 +15,11 @@ class FileSync
         Console.WriteLine("FileSync::Main(): Start");
 
         // Gather Input Args
-        FileSyncArgumentParser parser;
+        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "gancs");
         Dictionary<string, string> arguments;
         try
         {
-            parser = new FileSyncArgumentParser(args, "cs");
+            parser.parseArgs();
             arguments = parser.getArgs();
             setFlags(arguments);
         }
@@ -30,9 +30,8 @@ class FileSync
             Environment.Exit(1);
         }
 
-        // II.) Begin File Sync Threads
-
-        // III.) Delete
+        // Begin File Sync Threads
+        
 
         // Exit
         Console.WriteLine("FileSync::Main(): End");
@@ -41,9 +40,20 @@ class FileSync
 
     static void setFlags(Dictionary<string,string> arguments)
     {
+        Console.WriteLine("Foo");
         foreach (KeyValuePair<string, string> entry in arguments)
         {
-            Console.WriteLine($"Entry is {entry.ToString}");
+            switch (entry.Key)
+            {
+                case "-c":
+                    fileSync = false;
+                    copyFiles = true;
+                    break;
+                case "-s":
+                    fileSync = true;
+                    copyFiles = false;
+                    break;
+            }
         }
         return;
     }
