@@ -56,11 +56,11 @@ namespace ArgumentParsers
         // Checks to see if a value was provided
         protected bool checkArgVal(string[] inputArgs, int i)
         {
-            if (i+1 >= inputArgs.Length)
+            if (i + 1 >= inputArgs.Length)
             {
                 return false;
             }
-            else if (inputArgs[i+1].Contains('-'))
+            else if (inputArgs[i + 1].Contains('-'))
             {
                 return false;
             }
@@ -85,6 +85,18 @@ namespace ArgumentParsers
         public Dictionary<string, string> getArgs()
         {
             return args;
+        }
+
+        // Check for argument
+        public bool hasArg(string key)
+        {
+            return args.ContainsKey(key);
+        }
+
+        // Get the value of the key
+        public string getVal(string key)
+        {
+            return args[key];
         }
     }
 }

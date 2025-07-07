@@ -20,8 +20,7 @@ class FileSync
         try
         {
             parser.parseArgs();
-            arguments = parser.getArgs();
-            setFlags(arguments);
+            setFlags(parser);
         }
         catch (Exception e)
         {
@@ -38,23 +37,20 @@ class FileSync
         Environment.Exit(0);
     }
 
-    static void setFlags(Dictionary<string,string> arguments)
+    static void setFlags(FileSyncArgumentParser parser)
     {
-        Console.WriteLine("Foo");
-        foreach (KeyValuePair<string, string> entry in arguments)
+        if (parser.hasArg("-c"))
         {
-            switch (entry.Key)
-            {
-                case "-c":
-                    fileSync = false;
-                    copyFiles = true;
-                    break;
-                case "-s":
-                    fileSync = true;
-                    copyFiles = false;
-                    break;
-            }
+            fileSync = false;
+            copyFiles = true;
         }
+
+        if (parser.hasArg("-s"))
+        {
+            fileSync = true;
+            copyFiles = false;
+        }
+
         return;
     }
 }
