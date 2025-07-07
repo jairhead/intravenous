@@ -34,21 +34,21 @@ namespace ArgumentParsers
                     allowedArgs.Contains(input[i].Remove(0, 1) + ":") &&
                     checkArgVal(input, i))
                 {
-                    countOccurrences(input[i]);
-                    args.Add(input[i], input[i + 1]);
-                    i++;
-                }
-                else if (input[i].Contains('-') && allowedArgs.Contains(input[i].Remove(0, 1)))
-                {
                     int count = countOccurrences(input[i]);
                     if (count >= 1)
                     {
-                        args.Add(input[i] + count.ToString(), "-");
+                        args.Add(input[i] + count.ToString(), input[i + 1]);
                     }
                     else
                     {
-                        args.Add(input[i], "-");
+                        args.Add(input[i], input[i + 1]);
                     }
+                    i++;
+                }
+                else if (input[i].Contains('-') && allowedArgs.Contains(input[i].Remove(0, 1)) &&
+                         !args.ContainsKey(input[i]))
+                {
+                    args.Add(input[i], "-");
                 }
             }
         }
