@@ -1,6 +1,8 @@
 ﻿// FileSync Main
 using System;
+using System.IO;
 using ArgumentParsers;
+using FileUtils;
 
 class FileSync
 {
@@ -29,8 +31,9 @@ class FileSync
             Environment.Exit(1);
         }
 
-        // Begin File Sync Threads
-        
+        // Begin
+        FileSynchronizer fs = new FileSynchronizer(parser.getSrc(), parser.getDest());
+        fs.list();
 
         // Exit
         Console.WriteLine("FileSync::Main(): End");
