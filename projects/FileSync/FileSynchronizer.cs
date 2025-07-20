@@ -13,8 +13,15 @@ namespace FileUtils {
         // Constructor
         public FileSynchronizer(string src, string dest)
         {
-            this.src = new DirectoryInfo(src);
-            this.dest = new DirectoryInfo(dest);
+            try
+            {
+                this.src = new DirectoryInfo(src);
+                this.dest = new DirectoryInfo(dest);
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                throw;
+            }
         }
 
         // List Src Dirs
