@@ -30,7 +30,7 @@ namespace FileUtils {
                 destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
                 destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

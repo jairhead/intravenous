@@ -35,7 +35,7 @@ namespace ArgumentParsers
                 setDest(input[input.Length - 1]);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }
