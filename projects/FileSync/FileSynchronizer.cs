@@ -17,14 +17,25 @@ namespace FileUtils {
             this.dest = new DirectoryInfo(dest);
         }
 
-        // List
-        public void list()
+        // List Source Dirs
+        public void listSrc()
         {
-            DirectoryInfo[] srcDi = src.GetDirectories();
+            DirectoryInfo[] srcDirs = src.GetDirectories("*.*", SearchOption.AllDirectories);
             Console.WriteLine("Printing subdirectories of src");
-            foreach (DirectoryInfo dri in srcDi)
+            foreach (DirectoryInfo dir in srcDirs)
             {
-                Console.WriteLine(dri.Name);
+                Console.WriteLine(dir.Name);
+            }
+        }
+
+        // List Dest Dirs
+        public void listDest()
+        {
+            DirectoryInfo[] destDirs = src.GetDirectories("*.*", SearchOption.AllDirectories);
+            Console.WriteLine("Printing subdirectories of src");
+            foreach (DirectoryInfo dir in destDirs)
+            {
+                Console.WriteLine(dir.Name);
             }
         }
 

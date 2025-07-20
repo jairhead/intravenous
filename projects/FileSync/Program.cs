@@ -17,8 +17,7 @@ class FileSync
         Console.WriteLine("FileSync::Main(): Start");
 
         // Gather Input Args
-        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "gancs");
-        Dictionary<string, string> arguments;
+        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cs");
         try
         {
             parser.parseArgs();
