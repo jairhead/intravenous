@@ -8,7 +8,14 @@ namespace FileUtils {
     {
         // Internal variables
         DirectoryInfo src;
+        DirectoryInfo[] srcDirs;
+        FileInfo[] srcFiles;
+
         DirectoryInfo dest;
+        DirectoryInfo[] destDirs;
+        FileInfo[] destFiles;
+
+
 
         // Constructor
         public FileSynchronizer(string src, string dest)
@@ -16,9 +23,14 @@ namespace FileUtils {
             try
             {
                 this.src = new DirectoryInfo(src);
+                srcDirs = this.src.GetDirectories("*.*", SearchOption.AllDirectories);
+                srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
+
                 this.dest = new DirectoryInfo(dest);
+                destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
+                destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
             }
-            catch (DirectoryNotFoundException e)
+            catch (Exception e)
             {
                 throw;
             }
@@ -27,57 +39,57 @@ namespace FileUtils {
         // List Src Dirs
         public void listSrcDirs()
         {
-            DirectoryInfo[] srcDirs = src.GetDirectories("*.*", SearchOption.AllDirectories);
-            Console.WriteLine("Printing subdirectories of src");
+            Console.WriteLine("Source Directories:");
             foreach (DirectoryInfo dir in srcDirs)
             {
                 Console.WriteLine(dir.Name);
             }
+            Console.WriteLine();
         }
 
         // List Src Files
         public void listSrcFiles()
         {
-            FileInfo[] srcFiles = src.GetFiles("*.*", SearchOption.AllDirectories);
-            Console.WriteLine("Printing subdirectories of src");
+            Console.WriteLine("Source Files:");
             foreach (FileInfo file in srcFiles)
             {
                 Console.WriteLine(file.Name);
             }
+            Console.WriteLine();
         }
 
         // List Dest Dirs
         public void listDestDirs()
         {
-            DirectoryInfo[] destDirs = dest.GetDirectories("*.*", SearchOption.AllDirectories);
-            Console.WriteLine("Printing subdirectories of dest");
+            Console.WriteLine("Destination Directories:");
             foreach (DirectoryInfo dir in destDirs)
             {
                 Console.WriteLine(dir.Name);
             }
+            Console.WriteLine();
         }
 
         // List Dest Files
         public void listDestFiles()
         {
-            FileInfo[] destFiles = dest.GetFiles("*.*", SearchOption.AllDirectories);
-            Console.WriteLine("Printing subdirectories of src");
+            Console.WriteLine("Destionation Files:");
             foreach (FileInfo file in destFiles)
             {
                 Console.WriteLine(file.Name);
             }
+            Console.WriteLine();
         }
 
         // Synchronize files src <-> dest
         public void synchronize()
         {
-
+            
         }
 
         // Copy files src -> dest
         public void copy()
         {
-            
+
         }
     }
 }

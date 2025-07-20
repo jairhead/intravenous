@@ -32,8 +32,14 @@ class FileSync
 
         // Begin
         FileSynchronizer fs = new FileSynchronizer(parser.getSrc(), parser.getDest());
-        fs.listSrcFiles();
-        fs.listDestFiles();
+        if (fileSync)
+        {
+            fs.synchronize();
+        }
+        else
+        {
+            fs.copy();
+        }
 
         // Exit
         Console.WriteLine("FileSync::Main(): End");
