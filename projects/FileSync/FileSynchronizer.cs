@@ -31,8 +31,8 @@ namespace FileUtils {
         // List Dest Dirs
         public void listDest()
         {
-            DirectoryInfo[] destDirs = src.GetDirectories("*.*", SearchOption.AllDirectories);
-            Console.WriteLine("Printing subdirectories of src");
+            DirectoryInfo[] destDirs = dest.GetDirectories("*.*", SearchOption.AllDirectories);
+            Console.WriteLine("Printing subdirectories of dest");
             foreach (DirectoryInfo dir in destDirs)
             {
                 Console.WriteLine(dir.Name);

@@ -32,13 +32,15 @@ class FileSync
 
         // Begin
         FileSynchronizer fs = new FileSynchronizer(parser.getSrc(), parser.getDest());
-        fs.list();
+        fs.listSrc();
+        fs.listDest();
 
         // Exit
         Console.WriteLine("FileSync::Main(): End");
         Environment.Exit(0);
     }
 
+    // Helper Method for Setting Flags
     static void setFlags(FileSyncArgumentParser parser)
     {
         if (parser.hasArg("-c"))
