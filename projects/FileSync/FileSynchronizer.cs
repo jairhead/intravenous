@@ -100,21 +100,8 @@ namespace FileUtils {
         {
             try
             {
-                Array.Sort(
-                    srcFiles,
-                    delegate (FileInfo f1, FileInfo f2)
-                    {
-                        return f1.FullName.CompareTo(f2.FullName);
-                    }
-                );
-
-                Array.Sort(
-                    destFiles,
-                    delegate (FileInfo f1, FileInfo f2)
-                    {
-                        return f1.FullName.CompareTo(f2.FullName);
-                    }
-                );
+                Array.Sort(srcFiles, delegate(FileInfo f1, FileInfo f2) { return f1.FullName.CompareTo(f2.FullName); });
+                Array.Sort(destFiles, delegate(FileInfo f1, FileInfo f2) { return f1.FullName.CompareTo(f2.FullName); });
             }
             catch (Exception)
             {
