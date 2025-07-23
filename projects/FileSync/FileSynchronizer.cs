@@ -127,8 +127,6 @@ namespace FileUtils {
         {
             if (end > begin)
             {
-                Console.WriteLine($"Begin index: {begin}");
-                Console.WriteLine($"End index: {end}");
                 int middle = (begin + end) / 2;
                 if (name == files[middle].FullName)
                 {
