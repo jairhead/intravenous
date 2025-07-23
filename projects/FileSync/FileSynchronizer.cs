@@ -89,7 +89,10 @@ namespace FileUtils {
         // Copy files src -> dest
         public void copy()
         {
-
+            if (srcFiles.Length == 0)
+            {
+                return;
+            }
         }
 
         // Sort Files
@@ -122,8 +125,10 @@ namespace FileUtils {
         // Binary Search
         private int binSearch(FileInfo[] files, string name, int begin, int end)
         {
-            if (end >= begin)
+            if (end > begin)
             {
+                Console.WriteLine($"Begin index: {begin}");
+                Console.WriteLine($"End index: {end}");
                 int middle = (begin + end) / 2;
                 if (name == files[middle].FullName)
                 {
@@ -139,6 +144,22 @@ namespace FileUtils {
                 }
             }
             return -1;
+        }
+
+        // Binary Search (Overloaded)
+        private int binSearch(FileInfo[] files, string name)
+        {
+            return binSearch(files, name, 0, files.Length);
+        }
+
+        // Contains
+        private bool contains(FileInfo[] files, string name)
+        {
+            if (binSearch(files, name) > -1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
