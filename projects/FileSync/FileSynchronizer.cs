@@ -29,8 +29,6 @@ namespace FileUtils {
                 destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
 
                 sortFiles();
-                int ind = binSearch(srcFiles, "C:\\Users\\sharp\\Desktop\\Files\\test_source\\test_sub\\test_file4.txt", 0, srcFiles.Length - 1);
-                Console.WriteLine($"Index is {ind}");
             }
             catch (Exception)
             {
