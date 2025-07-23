@@ -115,15 +115,16 @@ namespace FileUtils {
             if (end > begin)
             {
                 int middle = (begin + end) / 2;
-                if (name == files[middle].FullName)
+                int compare = name.CompareTo(files[middle].FullName);
+                if (compare == 0)
                 {
                     return middle;
                 }
-                else if (name.CompareTo(files[middle].FullName) < 0)
+                else if (compare < 0)
                 {
                     return binSearch(files, name, begin, middle);
                 }
-                else if (name.CompareTo(files[middle].FullName) > 0)
+                else if (compare > 0)
                 {
                     return binSearch(files, name, (middle + 1), end);
                 }
