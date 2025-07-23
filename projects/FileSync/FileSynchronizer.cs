@@ -29,6 +29,8 @@ namespace FileUtils {
                 destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
 
                 sortFiles();
+                int ind = binSearch(srcFiles, "C:\\Users\\sharp\\Desktop\\Files\\test_source\\test_sub\\test_file4.txt", 0, srcFiles.Length - 1);
+                Console.WriteLine($"Index is {ind}");
             }
             catch (Exception)
             {
@@ -117,6 +119,28 @@ namespace FileUtils {
             {
                 throw;
             }
+        }
+
+        // Binary Search
+        private int binSearch(FileInfo[] files, string name, int begin, int end)
+        {
+            if (end >= begin)
+            {
+                int middle = (begin + end) / 2;
+                if (name == files[middle].FullName)
+                {
+                    return middle;
+                }
+                else if (name.CompareTo(files[middle].FullName) < 0)
+                {
+                    return binSearch(files, name, begin, middle);
+                }
+                else if (name.CompareTo(files[middle].FullName) > 0)
+                {
+                    return binSearch(files, name, (middle + 1), end);
+                }
+            }
+            return -1;
         }
     }
 }
