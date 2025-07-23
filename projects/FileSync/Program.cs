@@ -30,15 +30,25 @@ class FileSync
             Environment.Exit(1);
         }
 
-        // Begin
+        // Perform Operation
         FileSynchronizer fs = new FileSynchronizer(parser.getSrc(), parser.getDest());
-        if (fileSync)
+        fs.listSrcFiles();
+        try
         {
-            fs.synchronize();
+            if (fileSync)
+            {
+                fs.synchronize();
+            }
+            else if (copyFiles)
+            {
+                fs.copy();
+            }
         }
-        else
+        catch (Exception e)
         {
-            fs.copy();
+            Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
+            Console.WriteLine("FileSync::Main(): End");
+            Environment.Exit(1);
         }
 
         // Exit
