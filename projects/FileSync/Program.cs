@@ -32,8 +32,6 @@ class FileSync
 
         // Perform Specified Operation
         BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
-        fs.listSrcDirs();
-        fs.listDestDirs();
         try
         {
             if (fileSync)

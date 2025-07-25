@@ -157,6 +157,7 @@ namespace FileUtils {
                 {
                     try
                     {
+                        Console.WriteLine($"BinaryFileSynchronizer::copy(): Creating {srcDirName}");
                         Directory.CreateDirectory(srcDirName);
                     }
                     catch (UnauthorizedAccessException e)
@@ -172,10 +173,12 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
+                    Console.WriteLine($"BinaryFileSynchronizer::copy(): Copying {file} -> {srcFileName}");
                     file.CopyTo(srcFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
                 {
+                    Console.WriteLine($"BinaryFileSynchronizer::copy(): Overwriting {srcFileName}");
                     file.CopyTo(srcFileName, true);
                 }
             }
