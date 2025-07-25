@@ -30,9 +30,10 @@ class FileSync
             Environment.Exit(1);
         }
 
-        // Perform Operation
-        FileSynchronizer fs = new FileSynchronizer(parser.getSrc(), parser.getDest());
-        fs.listSrcFiles();
+        // Perform Specified Operation
+        BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
+        fs.listSrcDirs();
+        fs.listDestDirs();
         try
         {
             if (fileSync)
