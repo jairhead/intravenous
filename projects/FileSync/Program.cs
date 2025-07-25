@@ -7,8 +7,8 @@ using FileUtils;
 class FileSync
 {
     // Globals
-    static bool fileSync = true;
-    static bool copyFiles = false;
+    static bool fileSync = false;
+    static bool copyFiles = true;
 
     // Main
     static void Main(string[] args)
