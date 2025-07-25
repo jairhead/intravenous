@@ -88,16 +88,18 @@ namespace FileUtils {
         // Synchronize files src <-> dest
         public override void synchronize()
         {
-            Console.WriteLine($"Synchronize {src.FullName} <-> {dest.FullName}");
+            Console.WriteLine($"[PERFORM SYNC] {src.FullName} <-> {dest.FullName}");
             copyForward();
             copyBackward();
+            Console.WriteLine($"[FINISHED SYNC] {src.FullName} <-> {dest.FullName}");
         }
 
         // Copy files src -> dest
         public override void copy()
         {
-            Console.WriteLine($"Copy {src.FullName} -> {dest.FullName}");
+            Console.WriteLine($"[PERFORM COPY] {src.FullName} -> {dest.FullName}");
             copyForward();
+            Console.WriteLine($"[FINISHED COPY] {src.FullName} -> {dest.FullName}");
         }
 
         // Copy files src -> dest
