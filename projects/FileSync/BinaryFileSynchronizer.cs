@@ -88,6 +88,7 @@ namespace FileUtils {
         // Synchronize files src <-> dest
         public override void synchronize()
         {
+            Console.WriteLine($"Synchronize {src.FullName} <-> {dest.FullName}");
             copyForward();
             copyBackward();
         }
@@ -95,7 +96,8 @@ namespace FileUtils {
         // Copy files src -> dest
         public override void copy()
         {
-            copy();
+            Console.WriteLine($"Copy {src.FullName} -> {dest.FullName}");
+            copyForward();
         }
 
         // Copy files src -> dest
@@ -113,14 +115,8 @@ namespace FileUtils {
                 string destDirName = dest.FullName + dir.FullName.Substring(src.FullName.Length);
                 if (!containsDir(destDirs, destDirName))
                 {
-                    try
-                    {
-                        Directory.CreateDirectory(destDirName);
-                    }
-                    catch (UnauthorizedAccessException e)
-                    {
-                        Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
-                    }
+                    Console.WriteLine($"[MAKE DIR] {destDirName}");
+                    makeDirectory(destDirName);
                 }
             }
 
@@ -130,12 +126,13 @@ namespace FileUtils {
                 string destFileName = dest.FullName + file.FullName.Substring(src.FullName.Length);
                 if (!containsFile(destFiles, destFileName))
                 {
-                    Console.WriteLine($"{destFileName} is not in {dest.FullName}");
-                    file.CopyTo(destFileName, false);
+                    Console.WriteLine($"[COPY] {file} -> {destFileName}");
+                    copyFile(file, destFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(destFileName)) > 0)
                 {
-                    file.CopyTo(destFileName, true);
+                    Console.WriteLine($"[OVERWRITE] {destFileName}");
+                    copyFile(file, destFileName, true);
                 }
             }
         }
@@ -155,15 +152,8 @@ namespace FileUtils {
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
-                    try
-                    {
-                        Console.WriteLine($"BinaryFileSynchronizer::copy(): Creating {srcDirName}");
-                        Directory.CreateDirectory(srcDirName);
-                    }
-                    catch (UnauthorizedAccessException e)
-                    {
-                        Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
-                    }
+                    Console.WriteLine($"[MAKE DIR] {srcDirName}");
+                    makeDirectory(srcDirName);
                 }
             }
 
@@ -173,14 +163,40 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
-                    Console.WriteLine($"BinaryFileSynchronizer::copy(): Copying {file} -> {srcFileName}");
-                    file.CopyTo(srcFileName, false);
+                    Console.WriteLine($"[COPY] {file} -> {srcFileName}");
+                    copyFile(file, srcFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
                 {
-                    Console.WriteLine($"BinaryFileSynchronizer::copy(): Overwriting {srcFileName}");
-                    file.CopyTo(srcFileName, true);
+                    Console.WriteLine($"[OVERWRITE] {srcFileName}");
+                    copyFile(file, srcFileName, true);
                 }
+            }
+        }
+
+        // Make Directory
+        private void makeDirectory(string dirName)
+        {
+            try
+            {
+                Directory.CreateDirectory(dirName);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+            }
+        }
+
+        // Copy File
+        private void copyFile(FileInfo file, string fileName, bool overwrite)
+        {
+            try
+            {
+                file.CopyTo(fileName, overwrite);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
             }
         }
 

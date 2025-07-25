@@ -13,9 +13,6 @@ class FileSync
     // Main
     static void Main(string[] args)
     {
-        // Entry
-        Console.WriteLine("FileSync::Main(): Start");
-
         // Gather Input Args
         FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cs");
         try
@@ -26,7 +23,6 @@ class FileSync
         catch (Exception e)
         {
             Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
-            Console.WriteLine("FileSync::Main(): End");
             Environment.Exit(1);
         }
 
@@ -46,12 +42,10 @@ class FileSync
         catch (Exception e)
         {
             Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
-            Console.WriteLine("FileSync::Main(): End");
             Environment.Exit(1);
         }
 
         // Exit
-        Console.WriteLine("FileSync::Main(): End");
         Environment.Exit(0);
     }
 
