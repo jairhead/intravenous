@@ -8,12 +8,7 @@ namespace FileUtils {
     {
         // Members
         DirectoryInfo src;
-        DirectoryInfo[] srcDirs;
-        FileInfo[] srcFiles;
-
         DirectoryInfo dest;
-        DirectoryInfo[] destDirs;
-        FileInfo[] destFiles;
 
         // Constructor
         public BinaryFileSynchronizer(string src, string dest)
@@ -21,14 +16,7 @@ namespace FileUtils {
             try
             {
                 this.src = new DirectoryInfo(src);
-                srcDirs = this.src.GetDirectories("*.*", SearchOption.AllDirectories);
-                srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
-
                 this.dest = new DirectoryInfo(dest);
-                destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
-                destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
-
-                sortFiles();
             }
             catch (Exception)
             {
@@ -40,6 +28,7 @@ namespace FileUtils {
         public override void listSrcDirs()
         {
             Console.WriteLine("Source Directories:");
+            DirectoryInfo[] srcDirs = src.GetDirectories("*.*", SearchOption.AllDirectories);
             foreach (DirectoryInfo dir in srcDirs)
             {
                 Console.WriteLine(dir.FullName.Remove(0, src.FullName.Length));
@@ -51,6 +40,7 @@ namespace FileUtils {
         public override void listSrcFiles()
         {
             Console.WriteLine("Source Files:");
+            FileInfo[] srcFiles = src.GetFiles("*.*", SearchOption.AllDirectories);
             foreach (FileInfo file in srcFiles)
             {
                 Console.WriteLine(file.FullName.Remove(0, src.FullName.Length));
@@ -62,6 +52,7 @@ namespace FileUtils {
         public override void listDestDirs()
         {
             Console.WriteLine("Destination Directories:");
+            DirectoryInfo[] destDirs = dest.GetDirectories("*.*", SearchOption.AllDirectories);
             foreach (DirectoryInfo dir in destDirs)
             {
                 Console.WriteLine(dir.FullName.Remove(0, dest.FullName.Length));
@@ -73,6 +64,7 @@ namespace FileUtils {
         public override void listDestFiles()
         {
             Console.WriteLine("Destionation Files:");
+            FileInfo[] destFiles = dest.GetFiles("*.*", SearchOption.AllDirectories);
             foreach (FileInfo file in destFiles)
             {
                 Console.WriteLine(file.FullName.Remove(0, dest.FullName.Length));
@@ -89,6 +81,24 @@ namespace FileUtils {
         // Copy files src -> dest
         public override void copy()
         {
+            copy(src, dest);
+        }
+
+        // Copy files src -> dest (Overloaded)
+        private void copy(DirectoryInfo source, DirectoryInfo destination)
+        {
+            // Get sub-directories and files
+            DirectoryInfo[] srcDirs = source.GetDirectories("*.*", SearchOption.AllDirectories);
+            FileInfo[] srcFiles = source.GetFiles("*.*", SearchOption.AllDirectories);
+            DirectoryInfo[] destDirs = destination.GetDirectories("*.*", SearchOption.AllDirectories);
+            FileInfo[] destFiles = destination.GetFiles("*.*", SearchOption.AllDirectories);
+
+            // Sort everything
+            sortDirs(srcDirs);
+            sortFiles(srcFiles);
+            sortDirs(destDirs);
+            sortFiles(destFiles);
+
             // Return immediately if there is nothing to copy
             if (srcFiles.Length == 0)
             {
@@ -127,13 +137,25 @@ namespace FileUtils {
             }
         }
 
-        // Sort Files
-        private void sortFiles()
+        // Sort Directories
+        private void sortDirs(DirectoryInfo[] dirs)
         {
             try
             {
-                Array.Sort(srcFiles, delegate (FileInfo f1, FileInfo f2) { return f1.FullName.CompareTo(f2.FullName); });
-                Array.Sort(destFiles, delegate (FileInfo f1, FileInfo f2) { return f1.FullName.CompareTo(f2.FullName); });
+                Array.Sort(dirs, delegate (DirectoryInfo d1, DirectoryInfo d2) { return d1.FullName.CompareTo(d2.FullName); });
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // Sort Files
+        private void sortFiles(FileInfo[] files)
+        {
+            try
+            {
+                Array.Sort(files, delegate (FileInfo f1, FileInfo f2) { return f1.FullName.CompareTo(f2.FullName); });
             }
             catch (Exception)
             {
@@ -217,25 +239,6 @@ namespace FileUtils {
                 return true;
             }
             return false;
-        }
-
-        // Compare File Age
-        private int compareFileAge(string f1, string f2)
-        {
-            int compare = DateTime.Compare(File.GetLastWriteTime(f1), File.GetLastWriteTime(f2));
-            if (compare < 0)
-            {
-                Console.WriteLine($"{f1} was modified earlier than {f2}");
-            }
-            else if (compare > 0)
-            {
-                Console.WriteLine($"{f1} was modified later than {f2}");
-            }
-            else
-            {
-                Console.WriteLine($"{f1} and {f2} have the same time of last modification.");
-            }
-            return compare;
         }
     }
 }
