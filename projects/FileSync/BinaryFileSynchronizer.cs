@@ -2,13 +2,21 @@
 // Contains the BinaryFileSynchronizer class
 using System;
 using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Security.Authentication;
 
 namespace FileUtils {
     public class BinaryFileSynchronizer : AbstractFileSynchronizer
     {
         // Members
         DirectoryInfo src;
+        DirectoryInfo[] srcDirs;
+        FileInfo[] srcFiles;
+
         DirectoryInfo dest;
+        DirectoryInfo[] destDirs;
+        FileInfo[] destFiles;
+
 
         // Constructor
         public BinaryFileSynchronizer(string src, string dest)
@@ -16,7 +24,16 @@ namespace FileUtils {
             try
             {
                 this.src = new DirectoryInfo(src);
+                srcDirs = this.src.GetDirectories("*.*", SearchOption.AllDirectories);
+                srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
+                sortDirs(srcDirs);
+                sortFiles(srcFiles);
+
                 this.dest = new DirectoryInfo(dest);
+                destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
+                destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
+                sortDirs(destDirs);
+                sortFiles(destFiles);
             }
             catch (Exception)
             {
@@ -28,7 +45,6 @@ namespace FileUtils {
         public override void listSrcDirs()
         {
             Console.WriteLine("Source Directories:");
-            DirectoryInfo[] srcDirs = src.GetDirectories("*.*", SearchOption.AllDirectories);
             foreach (DirectoryInfo dir in srcDirs)
             {
                 Console.WriteLine(dir.FullName.Remove(0, src.FullName.Length));
@@ -40,7 +56,6 @@ namespace FileUtils {
         public override void listSrcFiles()
         {
             Console.WriteLine("Source Files:");
-            FileInfo[] srcFiles = src.GetFiles("*.*", SearchOption.AllDirectories);
             foreach (FileInfo file in srcFiles)
             {
                 Console.WriteLine(file.FullName.Remove(0, src.FullName.Length));
@@ -52,7 +67,6 @@ namespace FileUtils {
         public override void listDestDirs()
         {
             Console.WriteLine("Destination Directories:");
-            DirectoryInfo[] destDirs = dest.GetDirectories("*.*", SearchOption.AllDirectories);
             foreach (DirectoryInfo dir in destDirs)
             {
                 Console.WriteLine(dir.FullName.Remove(0, dest.FullName.Length));
@@ -63,8 +77,7 @@ namespace FileUtils {
         // List Dest Files
         public override void listDestFiles()
         {
-            Console.WriteLine("Destionation Files:");
-            FileInfo[] destFiles = dest.GetFiles("*.*", SearchOption.AllDirectories);
+            Console.WriteLine("Destination Files:");
             foreach (FileInfo file in destFiles)
             {
                 Console.WriteLine(file.FullName.Remove(0, dest.FullName.Length));
@@ -75,30 +88,19 @@ namespace FileUtils {
         // Synchronize files src <-> dest
         public override void synchronize()
         {
-
+            copyForward();
+            copyBackward();
         }
 
         // Copy files src -> dest
         public override void copy()
         {
-            copy(src, dest);
+            copy();
         }
 
-        // Copy files src -> dest (Overloaded)
-        private void copy(DirectoryInfo source, DirectoryInfo destination)
+        // Copy files src -> dest
+        private void copyForward()
         {
-            // Get sub-directories and files
-            DirectoryInfo[] srcDirs = source.GetDirectories("*.*", SearchOption.AllDirectories);
-            FileInfo[] srcFiles = source.GetFiles("*.*", SearchOption.AllDirectories);
-            DirectoryInfo[] destDirs = destination.GetDirectories("*.*", SearchOption.AllDirectories);
-            FileInfo[] destFiles = destination.GetFiles("*.*", SearchOption.AllDirectories);
-
-            // Sort everything
-            sortDirs(srcDirs);
-            sortFiles(srcFiles);
-            sortDirs(destDirs);
-            sortFiles(destFiles);
-
             // Return immediately if there is nothing to copy
             if (srcFiles.Length == 0)
             {
@@ -128,11 +130,53 @@ namespace FileUtils {
                 string destFileName = dest.FullName + file.FullName.Substring(src.FullName.Length);
                 if (!containsFile(destFiles, destFileName))
                 {
+                    Console.WriteLine($"{destFileName} is not in {dest.FullName}");
                     file.CopyTo(destFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(destFileName)) > 0)
                 {
                     file.CopyTo(destFileName, true);
+                }
+            }
+        }
+
+        // Copy files dest -> src
+        private void copyBackward()
+        {
+            // Return immediately if there is nothing to copy
+            if (srcFiles.Length == 0)
+            {
+                return;
+            }
+
+            // Create any missing directories
+            foreach (DirectoryInfo dir in destDirs)
+            {
+                string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
+                if (!containsDir(srcDirs, srcDirName))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(srcDirName);
+                    }
+                    catch (UnauthorizedAccessException e)
+                    {
+                        Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+                    }
+                }
+            }
+
+            // Copy files
+            foreach (FileInfo file in destFiles)
+            {
+                string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
+                if (!containsFile(srcFiles, srcFileName))
+                {
+                    file.CopyTo(srcFileName, false);
+                }
+                else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
+                {
+                    file.CopyTo(srcFileName, true);
                 }
             }
         }
