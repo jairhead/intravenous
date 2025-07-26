@@ -63,7 +63,7 @@ class FileSync
         Environment.Exit(0);
     }
 
-    // Helper Method for Setting Flags
+    // Helper method for setting program flags
     static void setFlags(FileSyncArgumentParser parser)
     {
         if (parser.hasArg("-c"))
@@ -89,6 +89,8 @@ class FileSync
 
         return;
     }
+
+    // Interrupt handler
     static void handler(object sender, ConsoleCancelEventArgs args)
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -98,19 +100,20 @@ class FileSync
         Environment.Exit(1);
     }
 
+    // Print the banner for the program
     static void printBanner()
     {
         List<string> banner = new List<string>
         {
-            "                                                                          ",
-            " |█▄       ▄█ |███████ |███████   .▄█▄  .▄█▄    .▄███▄  |███████  .▄███▄  ",
-            " |██▄     ▄██    |█       |█     |█▀ ▀█▄█▀ ▀█  |█▀   ▀█    |█    |█▀   ▀█ ",
-            " |███▄   ▄███    |█       |█    |█    |█    |█ |█▄         |█    |█▄      ",
-            " |██|█▄ ▄█|██    |█       |█    |█          |█   ▀███▄     |█      ▀███▄  ",
-            " |██ |███ |██    |█       |█    |█    |█    |█       ▀█    |█          ▀█ ",
-            " |██  |█  |██    |█       |█     |█▄.▄█▀█▄.▄█  |█▄  .▄█    |█    |█▄  .▄█ ",
-            " |██      |██ |███████    |█       ▀█▀   ▀█▀     ▀███▀  |███████   ▀███▀  ",
-            "                                                                          "
+            "                                                                              ",
+            " |█▄       ▄█ |███████ |███████   .▄███▄  .▄███▄    .▄███▄  |███████  .▄███▄  ",
+            " |██▄     ▄██    |█       |█     |█▀   ▀█▄█▀   ▀█  |█▀   ▀█    |█    |█▀   ▀█ ",
+            " |███▄   ▄███    |█       |█    |█      |█      |█ |█▄         |█    |█▄      ",
+            " |██|█▄ ▄█|██    |█       |█    |█              |█   ▀███▄     |█      ▀███▄  ",
+            " |██ |███ |██    |█       |█    |█      |█      |█       ▀█    |█          ▀█ ",
+            " |██  |█  |██    |█       |█     |█▄.  ▄█▀█▄  .▄█  |█▄  .▄█    |█    |█▄  .▄█ ",
+            " |██      |██ |███████    |█       ▀███▀   ▀███▀     ▀███▀  |███████   ▀███▀  ",
+            "                                                                              "
         };
 
         foreach (string line in banner)
