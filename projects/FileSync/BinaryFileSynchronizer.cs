@@ -205,7 +205,7 @@ namespace FileUtils {
         private void copyBackward()
         {
             // Return immediately if there is nothing to copy
-            if (srcFiles.Length == 0)
+            if (destFiles.Length == 0)
             {
                 return;
             }
@@ -251,7 +251,7 @@ namespace FileUtils {
         private void deleteBackward()
         {
             // Delete any files in dest that aren't in src
-            foreach (FileInfo file in srcFiles)
+            foreach (FileInfo file in destFiles)
             {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
