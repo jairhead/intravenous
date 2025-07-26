@@ -17,6 +17,8 @@ class FileSync
     static void Main(string[] args)
     {
         // Setup
+        ConsoleColor defaultColor = Console.ForegroundColor;
+        printBanner();
         Console.CancelKeyPress += new ConsoleCancelEventHandler(handler);
 
         // Gather Input Args
@@ -28,6 +30,7 @@ class FileSync
         }
         catch (Exception e)
         {
+            Console.ForegroundColor = defaultColor;
             Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
             Environment.Exit(1);
         }
@@ -51,6 +54,7 @@ class FileSync
         }
         catch (Exception e)
         {
+            Console.ForegroundColor = defaultColor;
             Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
             Environment.Exit(1);
         }
@@ -89,9 +93,33 @@ class FileSync
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[INTERRUPT] ");
-        Console.ForegroundColor = defaultColor;
         Console.WriteLine("Exiting program.");
-
+        Console.ForegroundColor = defaultColor;
         Environment.Exit(1);
+    }
+
+    static void printBanner()
+    {
+        List<string> banner = new List<string>
+        {
+            "                                                                         ",
+            " ----------------------------------------------------------------------- ",
+            "-------------------------------------------------------------------------",
+            " -m        -m -IIIIIII -TTTTTTT  -oOo  -oOo    -sSSSs  -IIIIIII  -sSSSs  ",
+            " -MMm    -mMM   -iIi     -tTt   -O  -OoO  -O  -S    -S   -iIi   -S    -S ",
+            " -M-Mm  -mM-M    -i       -T   -O    -O    -O -S          -i    -S       ",
+            " -M -Mm-mM -M    -i       -T   -O          -O  -sSSSs     -i     -sSSSs  ",
+            " -M   -M   -M    -i       -T   -O    -O    -O       -S    -i          -S ",
+            " -M        -M   -iIi      -T    -O  -OoO  -O  -S    -S   -iIi   -S    -S ",
+            " -M        -M -IIIIIII    -T     -°O°  -°O°    -SSSSS  -IIIIIII  -SSSSS  ",
+            "-------------------------------------------------------------------------",
+            " ----------------------------------------------------------------------- ",
+            "                                                                         "
+        };
+
+        foreach (string line in banner)
+        {
+            Console.WriteLine(line);
+        }
     }
 }
