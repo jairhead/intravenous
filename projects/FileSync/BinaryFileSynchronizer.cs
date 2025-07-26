@@ -265,8 +265,9 @@ namespace FileUtils {
             }
 
             // Delete any directories in dest that aren't in src
-            foreach (DirectoryInfo dir in destDirs)
+            for (int i = destDirs.Length - 1; i >= 0; i--)
             {
+                DirectoryInfo dir = destDirs[i];
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
