@@ -10,5 +10,6 @@ namespace FileUtils {
         public abstract void listDestFiles();
         public abstract void synchronize();
         public abstract void copy();
+        public abstract void replicate();
     }
 }

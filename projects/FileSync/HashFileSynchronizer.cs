@@ -41,7 +41,7 @@ namespace FileUtils {
                 {
                     this.srcDirs.Add(dir.FullName, dir);
                 }
-                
+
                 foreach (FileInfo file in destFiles)
                 {
                     this.srcFiles.Add(file.FullName, file);
@@ -106,10 +106,12 @@ namespace FileUtils {
         // Copy files src -> dest
         public override void copy()
         {
-            if (srcFiles.Count == 0)
-            {
-                return;
-            }
+
+        }
+        
+        // Replicate (destructive copy) src -> dest
+        public override void replicate()
+        {
         }
     }
 }

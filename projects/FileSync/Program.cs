@@ -7,14 +7,20 @@ using FileUtils;
 class FileSync
 {
     // Globals
-    static bool fileSync = false;
-    static bool copyFiles = true;
+    static bool copy = true;
+    static bool sync = false;
+    static bool replicate = false;
+
+    static ConsoleColor defaultColor = Console.ForegroundColor;
 
     // Main
     static void Main(string[] args)
     {
+        // Setup
+        Console.CancelKeyPress += new ConsoleCancelEventHandler(handler);
+
         // Gather Input Args
-        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cs");
+        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "csr");
         try
         {
             parser.parseArgs();
@@ -30,13 +36,17 @@ class FileSync
         BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
         try
         {
-            if (fileSync)
+            if (copy)
+            {
+                fs.copy();
+            }
+            else if (sync)
             {
                 fs.synchronize();
             }
-            else if (copyFiles)
+            else if (replicate)
             {
-                fs.copy();
+                fs.replicate();
             }
         }
         catch (Exception e)
@@ -54,16 +64,34 @@ class FileSync
     {
         if (parser.hasArg("-c"))
         {
-            fileSync = false;
-            copyFiles = true;
+            copy = true;
+            sync = false;
+            replicate = false;
         }
 
         if (parser.hasArg("-s"))
         {
-            fileSync = true;
-            copyFiles = false;
+            copy = false;
+            sync = true;
+            replicate = false;
+        }
+
+        if (parser.hasArg("-r"))
+        {
+            copy = false;
+            sync = false;
+            replicate = true;
         }
 
         return;
+    }
+    static void handler(object sender, ConsoleCancelEventArgs args)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("[INTERRUPT] ");
+        Console.ForegroundColor = defaultColor;
+        Console.WriteLine("Exiting program.");
+
+        Environment.Exit(1);
     }
 }

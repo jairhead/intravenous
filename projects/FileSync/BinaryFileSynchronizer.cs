@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Security.Authentication;
+using Microsoft.VisualBasic;
 
 namespace FileUtils {
     public class BinaryFileSynchronizer : AbstractFileSynchronizer
@@ -17,6 +18,8 @@ namespace FileUtils {
         DirectoryInfo[] destDirs;
         FileInfo[] destFiles;
 
+        ConsoleColor defaultColor = Console.ForegroundColor;
+
 
         // Constructor
         public BinaryFileSynchronizer(string src, string dest)
@@ -24,15 +27,32 @@ namespace FileUtils {
             try
             {
                 this.src = new DirectoryInfo(src);
+                this.dest = new DirectoryInfo(dest);
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("[INDEXING SRC DIRECTORY] ");
+                Console.ForegroundColor = defaultColor;
+                Console.WriteLine($"{this.src.FullName}");
                 srcDirs = this.src.GetDirectories("*.*", SearchOption.AllDirectories);
-                srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
                 sortDirs(srcDirs);
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("[INDEXING SRC FILES]");
+                Console.ForegroundColor = defaultColor;
+                srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(srcFiles);
 
-                this.dest = new DirectoryInfo(dest);
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write("[INDEXING DEST DIRECTORY] ");
+                Console.ForegroundColor = defaultColor;
+                Console.WriteLine($"{this.dest.FullName}");
                 destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
-                destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
                 sortDirs(destDirs);
+
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("[INDEXING DEST FILES] ");
+                Console.ForegroundColor = defaultColor;
+                destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(destFiles);
             }
             catch (Exception)
@@ -88,18 +108,51 @@ namespace FileUtils {
         // Synchronize files src <-> dest
         public override void synchronize()
         {
-            Console.WriteLine($"[PERFORM SYNC] {src.FullName} <-> {dest.FullName}");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("[START SYNC] ");
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine($"{src.FullName} <-> {dest.FullName}");
+
             copyForward();
             copyBackward();
-            Console.WriteLine($"[FINISHED SYNC] {src.FullName} <-> {dest.FullName}");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("[FINISH SYNC] ");
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine($"{src.FullName} <-> {dest.FullName}");
         }
 
         // Copy files src -> dest
         public override void copy()
         {
-            Console.WriteLine($"[PERFORM COPY] {src.FullName} -> {dest.FullName}");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("[START COPY] ");
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+
             copyForward();
-            Console.WriteLine($"[FINISHED COPY] {src.FullName} -> {dest.FullName}");
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("[FINISH COPY] ");
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+        }
+
+        // Replicate (destructive copy) src -> dest
+        public override void replicate()
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("[START REPLICATE] ");
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+
+            copyForward();
+            deleteBackward();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("[FINISH REPLICATE] ");
+            Console.ForegroundColor = defaultColor;
+            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
         }
 
         // Copy files src -> dest
@@ -117,7 +170,10 @@ namespace FileUtils {
                 string destDirName = dest.FullName + dir.FullName.Substring(src.FullName.Length);
                 if (!containsDir(destDirs, destDirName))
                 {
-                    Console.WriteLine($"[MAKE DIR] {destDirName}");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("[MAKE DIR] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{destDirName}");
                     makeDirectory(destDirName);
                 }
             }
@@ -128,12 +184,18 @@ namespace FileUtils {
                 string destFileName = dest.FullName + file.FullName.Substring(src.FullName.Length);
                 if (!containsFile(destFiles, destFileName))
                 {
-                    Console.WriteLine($"[COPY] {file} -> {destFileName}");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("[COPY] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{file.Name} -> {destFileName}");
                     copyFile(file, destFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(destFileName)) > 0)
                 {
-                    Console.WriteLine($"[OVERWRITE] {destFileName}");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("[OVERWRITE] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{destFileName}");
                     copyFile(file, destFileName, true);
                 }
             }
@@ -154,7 +216,10 @@ namespace FileUtils {
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
-                    Console.WriteLine($"[MAKE DIR] {srcDirName}");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("[MAKE DIR] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{srcDirName}");
                     makeDirectory(srcDirName);
                 }
             }
@@ -165,13 +230,51 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
-                    Console.WriteLine($"[COPY] {file} -> {srcFileName}");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("[COPY] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{file.Name} -> {srcFileName}");
                     copyFile(file, srcFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
                 {
-                    Console.WriteLine($"[OVERWRITE] {srcFileName}");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("[OVERWRITE] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{srcFileName}");
                     copyFile(file, srcFileName, true);
+                }
+            }
+        }
+
+        // Delete dirs and files to make dest resemble src
+        private void deleteBackward()
+        {
+            // Delete any files in dest that aren't in src
+            foreach (FileInfo file in srcFiles)
+            {
+                string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
+                if (!containsFile(srcFiles, srcFileName))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("[DELETE] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{file.Name}");
+                    deleteFile(file.FullName);
+                }
+            }
+
+            // Delete any directories in dest that aren't in src
+            foreach (DirectoryInfo dir in destDirs)
+            {
+                string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
+                if (!containsDir(srcDirs, srcDirName))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("[RM DIR] ");
+                    Console.ForegroundColor = defaultColor;
+                    Console.WriteLine($"{dir.FullName}");
+                    deleteDirectory(dir.FullName);
                 }
             }
         }
@@ -189,12 +292,38 @@ namespace FileUtils {
             }
         }
 
+        // Delete Directory
+        private void deleteDirectory(string dirName)
+        {
+            try
+            {
+                Directory.Delete(dirName);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+            }
+        }
+
         // Copy File
         private void copyFile(FileInfo file, string fileName, bool overwrite)
         {
             try
             {
                 file.CopyTo(fileName, overwrite);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
+            }
+        }
+
+        // Delete File
+        private void deleteFile(string fileName)
+        {
+            try
+            {
+                File.Delete(fileName);
             }
             catch (UnauthorizedAccessException e)
             {
