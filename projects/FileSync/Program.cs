@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Intrinsics.Arm;
 using ArgumentParsers;
 using FileUtils;
+using TerminalUtils;
 
 class FileSync
 {
@@ -14,14 +15,16 @@ class FileSync
     static bool replicate = false;
     static bool runDaemon = false;
     static List<string> searchPatterns = new List<string>();
+    static Spinner s = new Spinner();
 
     // Main
     static void Main(string[] args)
     {
         // Setup
         Console.ForegroundColor = ConsoleColor.Gray;
-        printBanner();
         Console.CancelKeyPress += new ConsoleCancelEventHandler(cancelHandler);
+        printBanner();
+        s.start();
 
         // Gather Input Args
         FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdsrf:");
@@ -80,6 +83,7 @@ class FileSync
         }
 
         // Exit
+        s.stop();
         Environment.Exit(0);
     }
 
@@ -130,6 +134,7 @@ class FileSync
     // Interrupt handler
     static void cancelHandler(object sender, ConsoleCancelEventArgs args)
     {
+        s.stop();
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.Write("[INTERRUPT] ");
         Console.ForegroundColor = ConsoleColor.Gray;
@@ -140,6 +145,7 @@ class FileSync
     // Error
     static void error(Exception e)
     {
+        s.stop();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[ERROR] ");
         Console.ForegroundColor = ConsoleColor.Gray;
