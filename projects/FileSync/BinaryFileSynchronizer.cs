@@ -19,8 +19,6 @@ namespace FileUtils {
         DirectoryInfo[] destDirs;
         FileInfo[] destFiles;
 
-        ConsoleColor defaultColor = Console.ForegroundColor;
-
         // Constructor
         public BinaryFileSynchronizer(string src, string dest)
         {
@@ -31,27 +29,27 @@ namespace FileUtils {
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("[INDEXING SRC DIRECTORY] ");
-                Console.ForegroundColor = defaultColor;
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{this.src.FullName}");
                 srcDirs = this.src.GetDirectories("*.*", SearchOption.AllDirectories);
                 sortDirs(srcDirs);
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("[INDEXING SRC FILES]");
-                Console.ForegroundColor = defaultColor;
+                Console.ForegroundColor = ConsoleColor.Gray;
                 srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(srcFiles);
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("[INDEXING DEST DIRECTORY] ");
-                Console.ForegroundColor = defaultColor;
+                Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{this.dest.FullName}");
                 destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
                 sortDirs(destDirs);
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("[INDEXING DEST FILES] ");
-                Console.ForegroundColor = defaultColor;
+                Console.ForegroundColor = ConsoleColor.Gray;
                 destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(destFiles);
             }
@@ -110,7 +108,7 @@ namespace FileUtils {
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("[START SYNC] ");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
@@ -118,7 +116,7 @@ namespace FileUtils {
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("[FINISH SYNC] ");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{src.FullName} <-> {dest.FullName}");
         }
 
@@ -127,14 +125,14 @@ namespace FileUtils {
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("[START COPY] ");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{src.FullName} -> {dest.FullName}");
 
             copyForward();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("[FINISH COPY] ");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{src.FullName} -> {dest.FullName}");
         }
 
@@ -143,7 +141,7 @@ namespace FileUtils {
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("[START REPLICATE] ");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{src.FullName} -> {dest.FullName}");
 
             copyForward();
@@ -151,7 +149,7 @@ namespace FileUtils {
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("[FINISH REPLICATE] ");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{src.FullName} -> {dest.FullName}");
         }
 
@@ -172,7 +170,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write("[MAKE DIR] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{destDirName}");
                     makeDirectory(destDirName);
                 }
@@ -186,7 +184,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write("[COPY] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{file.Name} -> {destFileName}");
                     copyFile(file, destFileName, false);
                 }
@@ -194,7 +192,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("[OVERWRITE] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{destFileName}");
                     copyFile(file, destFileName, true);
                 }
@@ -218,7 +216,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write("[MAKE DIR] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{srcDirName}");
                     makeDirectory(srcDirName);
                 }
@@ -232,7 +230,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write("[COPY] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{file.Name} -> {srcFileName}");
                     copyFile(file, srcFileName, false);
                 }
@@ -240,7 +238,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("[OVERWRITE] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{srcFileName}");
                     copyFile(file, srcFileName, true);
                 }
@@ -258,7 +256,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("[DELETE] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{file.Name}");
                     deleteFile(file.FullName);
                 }
@@ -273,7 +271,7 @@ namespace FileUtils {
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("[RM DIR] ");
-                    Console.ForegroundColor = defaultColor;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.WriteLine($"{dir.FullName}");
                     deleteDirectory(dir.FullName);
                 }
@@ -359,7 +357,7 @@ namespace FileUtils {
         }
 
         // Binary File Search
-        private FileInfo binFSearch(FileInfo[] files, string fileName, int begin, int end)
+        private FileInfo? binFSearch(FileInfo[] files, string fileName, int begin, int end)
         {
             if (end > begin)
             {
@@ -382,7 +380,7 @@ namespace FileUtils {
         }
 
         // Binary File Search (Overloaded)
-        private FileInfo binFSearch(FileInfo[] files, string fileName)
+        private FileInfo? binFSearch(FileInfo[] files, string fileName)
         {
             return binFSearch(files, fileName, 0, files.Length);
         }
@@ -398,7 +396,7 @@ namespace FileUtils {
         }
 
         // Binary Directory Search
-        private DirectoryInfo binDSearch(DirectoryInfo[] dirs, string name, int begin, int end)
+        private DirectoryInfo? binDSearch(DirectoryInfo[] dirs, string name, int begin, int end)
         {
             if (end > begin)
             {
@@ -421,7 +419,7 @@ namespace FileUtils {
         }
 
         // Binary Directory Search (Overloaded)
-        private DirectoryInfo binDSearch(DirectoryInfo[] dirs, string name)
+        private DirectoryInfo? binDSearch(DirectoryInfo[] dirs, string name)
         {
             return binDSearch(dirs, name, 0, dirs.Length);
         }

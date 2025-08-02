@@ -13,16 +13,13 @@ class FileSync
     static bool sync = false;
     static bool replicate = false;
     static bool runDaemon = false;
-    static int daemonMode = 1;
     static List<string> searchPatterns = new List<string>();
-
-    static ConsoleColor defaultColor = Console.ForegroundColor;
 
     // Main
     static void Main(string[] args)
     {
         // Setup
-        ConsoleColor defaultColor = Console.ForegroundColor;
+        Console.ForegroundColor = ConsoleColor.Gray;
         printBanner();
         Console.CancelKeyPress += new ConsoleCancelEventHandler(cancelHandler);
 
@@ -35,40 +32,46 @@ class FileSync
         }
         catch (Exception e)
         {
-            Console.ForegroundColor = defaultColor;
-            Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
-            Environment.Exit(1);
+            error(e);
         }
 
-        // Perform Specified Operation
-        BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
-        try
+        // Perform Initial Operation
+        if (copy || sync || replicate)
         {
-            if (copy)
+            try
             {
-                fs.copy();
+                BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
+                if (copy)
+                {
+                    fs.copy();
+                }
+                else if (sync)
+                {
+                    fs.synchronize();
+                }
+                else if (replicate)
+                {
+                    fs.replicate();
+                }
             }
-            else if (sync)
+            catch (Exception e)
             {
-                fs.synchronize();
+                error(e);
             }
-            else if (replicate)
-            {
-                fs.replicate();
-            }
-        }
-        catch (Exception e)
-        {
-            Console.ForegroundColor = defaultColor;
-            Console.WriteLine($"FileSync::Main(): [ERROR] {e.Message}");
-            Environment.Exit(1);
         }
 
-        // Activate daemon mode
+        // Daemon Mode
         if (runDaemon)
         {
-            SyncMonitor fm = new SyncMonitor(parser.getSrc(), parser.getDest(), daemonMode);
-            fm.activateDaemonMode();
+            try
+            {
+                SyncMonitor fm = new SyncMonitor(parser.getSrc(), parser.getDest());
+                fm.activateDaemon();
+            }
+            catch (Exception e)
+            {
+                error(e);
+            }
 
             while (true)
             {
@@ -88,7 +91,6 @@ class FileSync
             copy = true;
             sync = false;
             replicate = false;
-            daemonMode = 1;
         }
 
         if (parser.hasArg("-d"))
@@ -101,7 +103,6 @@ class FileSync
             copy = false;
             sync = true;
             replicate = false;
-            daemonMode = 2;
         }
 
         if (parser.hasArg("-r"))
@@ -109,7 +110,6 @@ class FileSync
             copy = false;
             sync = false;
             replicate = true;
-            daemonMode = 3;
         }
 
         if (parser.hasArg("-f") && copy)
@@ -130,10 +130,20 @@ class FileSync
     // Interrupt handler
     static void cancelHandler(object sender, ConsoleCancelEventArgs args)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
+        Console.ForegroundColor = ConsoleColor.Cyan;
         Console.Write("[INTERRUPT] ");
+        Console.ForegroundColor = ConsoleColor.Gray;
         Console.WriteLine("Exiting program.");
-        Console.ForegroundColor = defaultColor;
+        Environment.Exit(0);
+    }
+
+    // Error
+    static void error(Exception e)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("[ERROR] ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine($"{e.Message}");
         Environment.Exit(1);
     }
 

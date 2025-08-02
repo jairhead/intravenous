@@ -1,43 +1,39 @@
 // SyncMonitor.cs
 // Contains the SyncMonitor class
 
+using System.IO.IsolatedStorage;
+
 namespace FileUtils
 {
     public class SyncMonitor
     {
         // Members
-        string src;
+        static string source = "";
         FileSystemWatcher srcWatcher;
 
-        string dest;
-        FileSystemWatcher destWatcher;
-
-        int daemonMode = 1;
-        ConsoleColor defaultColor = Console.ForegroundColor;
+        static string destination = "";
 
         // Constructor
-        public SyncMonitor(string src, string dest, int daemonMode)
+        public SyncMonitor(string src, string dest)
         {
-            this.src = src;
-            this.dest = dest;
-            this.daemonMode = daemonMode;
+            source = src;
+            destination = dest;
         }
 
         // Activate Daemon Mode
-        public void activateDaemonMode()
+        public void activateDaemon()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("[ACTIVATE DAEMON]");
-            Console.ForegroundColor = defaultColor;
+            Console.ForegroundColor = ConsoleColor.Gray;
 
             setUpSrcWatcher();
-            setUpDestWatcher();
         }
 
         // Set up source watcher
         private void setUpSrcWatcher()
         {
-            srcWatcher = new FileSystemWatcher(src);
+            srcWatcher = new FileSystemWatcher(source);
             srcWatcher.NotifyFilter = NotifyFilters.Attributes
                                     | NotifyFilters.CreationTime
                                     | NotifyFilters.DirectoryName
@@ -55,41 +51,10 @@ namespace FileUtils
             srcWatcher.EnableRaisingEvents = true;
         }
 
-        // Set up destination watcher
-        private void setUpDestWatcher()
-        {
-            if (daemonMode == 2 || daemonMode == 3)
-            {
-                destWatcher = new FileSystemWatcher(dest);
-                destWatcher.NotifyFilter = NotifyFilters.Attributes
-                                        | NotifyFilters.CreationTime
-                                        | NotifyFilters.DirectoryName
-                                        | NotifyFilters.FileName
-                                        | NotifyFilters.LastAccess
-                                        | NotifyFilters.LastWrite
-                                        | NotifyFilters.Security
-                                        | NotifyFilters.Size;
-                destWatcher.Changed += OnChanged;
-                destWatcher.Renamed += OnRenamed;
-                destWatcher.Deleted += OnDeleted;
-                destWatcher.Error += OnError;
-                destWatcher.IncludeSubdirectories = true;
-                destWatcher.EnableRaisingEvents = true;
-
-                if (daemonMode == 2)
-                {
-                    destWatcher.Created += OnCreated;
-                }
-                else
-                {
-                    destWatcher.Created += OnCreatedDestReplicate;
-                }
-            }
-        }
-
         // Changed callback
         private static void OnChanged(object sender, FileSystemEventArgs e)
         {
+            string destName = destination + e.FullPath.Substring(source.Length);
             Console.WriteLine($"Changed: {e.FullPath}");
         }
 
@@ -97,11 +62,6 @@ namespace FileUtils
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
             Console.WriteLine($"Created: {e.FullPath}");
-        }
-
-        private static void OnCreatedDestReplicate(object sender, FileSystemEventArgs e)
-        {
-            Console.WriteLine($"Replicate Created: {e.FullPath}");
         }
 
         // Renamed callback
@@ -120,6 +80,70 @@ namespace FileUtils
         private static void OnError(object sender, ErrorEventArgs e)
         {
             throw new Exception(e.GetException().Message);
+        }
+
+        // Check for file or dir
+        private static bool isFile(FileSystemEventArgs e)
+        {
+            FileAttributes attr = File.GetAttributes(e.FullPath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        // Make Directory
+        private void makeDirectory(string dirName)
+        {
+            try
+            {
+                Directory.CreateDirectory(dirName);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+            }
+        }
+
+        // Delete Directory
+        private void deleteDirectory(string dirName)
+        {
+            try
+            {
+                Directory.Delete(dirName);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+            }
+        }
+
+        // Copy File
+        private void copyFile(FileInfo file, string fileName, bool overwrite)
+        {
+            try
+            {
+                file.CopyTo(fileName, overwrite);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
+            }
+        }
+
+        // Delete File
+        private void deleteFile(string fileName)
+        {
+            try
+            {
+                File.Delete(fileName);
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
+            }
         }
     }
 }
