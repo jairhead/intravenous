@@ -12,7 +12,8 @@ class FileSync
     static bool copy = true;
     static bool sync = false;
     static bool replicate = false;
-    static bool daemonMode = false;
+    static bool runDaemon = false;
+    static int daemonMode = 1;
     static List<string> searchPatterns = new List<string>();
 
     static ConsoleColor defaultColor = Console.ForegroundColor;
@@ -40,7 +41,7 @@ class FileSync
         }
 
         // Perform Specified Operation
-        BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest(), daemonMode);
+        BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
         try
         {
             if (copy)
@@ -63,9 +64,12 @@ class FileSync
             Environment.Exit(1);
         }
 
-        // Daemon mode
-        if (daemonMode)
+        // Activate daemon mode
+        if (runDaemon)
         {
+            SyncMonitor fm = new SyncMonitor(parser.getSrc(), parser.getDest(), daemonMode);
+            fm.activateDaemonMode();
+
             while (true)
             {
                 Thread.Sleep(30000);
@@ -84,12 +88,12 @@ class FileSync
             copy = true;
             sync = false;
             replicate = false;
+            daemonMode = 1;
         }
 
         if (parser.hasArg("-d"))
         {
-            Console.WriteLine("Daemon mode set!");
-            daemonMode = true;
+            runDaemon = true;
         }
 
         if (parser.hasArg("-s"))
@@ -97,6 +101,7 @@ class FileSync
             copy = false;
             sync = true;
             replicate = false;
+            daemonMode = 2;
         }
 
         if (parser.hasArg("-r"))
@@ -104,6 +109,7 @@ class FileSync
             copy = false;
             sync = false;
             replicate = true;
+            daemonMode = 3;
         }
 
         if (parser.hasArg("-f") && copy)
