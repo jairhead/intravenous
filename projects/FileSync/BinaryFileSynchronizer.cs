@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Security.Authentication;
+using System.Security.Principal;
 using Microsoft.VisualBasic;
 
 namespace FileUtils {
@@ -13,21 +14,26 @@ namespace FileUtils {
         DirectoryInfo src;
         DirectoryInfo[] srcDirs;
         FileInfo[] srcFiles;
+        FileSystemWatcher srcWatcher;
 
         DirectoryInfo dest;
         DirectoryInfo[] destDirs;
         FileInfo[] destFiles;
+        FileSystemWatcher destWatcher;
+
+        bool daemonMode = false;
+        bool ignore = false;
 
         ConsoleColor defaultColor = Console.ForegroundColor;
 
-
         // Constructor
-        public BinaryFileSynchronizer(string src, string dest)
+        public BinaryFileSynchronizer(string src, string dest, bool daemonMode)
         {
             try
             {
                 this.src = new DirectoryInfo(src);
                 this.dest = new DirectoryInfo(dest);
+                this.daemonMode = daemonMode;
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.Write("[INDEXING SRC DIRECTORY] ");
@@ -136,6 +142,14 @@ namespace FileUtils {
             Console.Write("[FINISH COPY] ");
             Console.ForegroundColor = defaultColor;
             Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+
+            if (daemonMode)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("[ACTIVATE DAEMON MODE]");
+                Console.ForegroundColor = defaultColor;
+                activateDaemonMode(1);
+            }
         }
 
         // Replicate (destructive copy) src -> dest
@@ -434,6 +448,57 @@ namespace FileUtils {
                 return true;
             }
             return false;
+        }
+
+        // Activate Daemon Mode
+        private void activateDaemonMode(int mode)
+        {
+            srcWatcher = new FileSystemWatcher(src.FullName);
+            srcWatcher.NotifyFilter = NotifyFilters.Attributes
+                                    | NotifyFilters.CreationTime
+                                    | NotifyFilters.DirectoryName
+                                    | NotifyFilters.FileName
+                                    | NotifyFilters.LastAccess
+                                    | NotifyFilters.LastWrite
+                                    | NotifyFilters.Security
+                                    | NotifyFilters.Size;
+            srcWatcher.Changed += OnChanged;
+            srcWatcher.Created += OnCreated;
+            srcWatcher.Renamed += OnRenamed;
+            srcWatcher.Deleted += OnDeleted;
+            srcWatcher.Error += OnError;
+            srcWatcher.IncludeSubdirectories = true;
+            srcWatcher.EnableRaisingEvents = true;
+        }
+
+        // Changed Callback (Daemon Mode)
+        private static void OnChanged(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine($"Changed: {e.FullPath}");
+        }
+
+        // Created Callback (Daemon Mode)
+        private static void OnCreated(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine($"Created: {e.FullPath}");
+        }
+
+        // Renamed Callback (Daemon Mode)
+        private static void OnRenamed(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine($"Renamed: {e.FullPath}");
+        }
+
+        // Deleted Callback (Daemon Mode)
+        private static void OnDeleted(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine($"Deleted: {e.FullPath}");
+        }
+
+        // Error Callback (Daemon Mode)
+        private static void OnError(object sender, ErrorEventArgs e)
+        {
+            throw new Exception(e.GetException().Message);
         }
     }
 }

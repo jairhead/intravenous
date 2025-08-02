@@ -1,5 +1,6 @@
 ﻿// FileSync Main
 using System;
+using System.Formats.Asn1;
 using System.IO;
 using System.Runtime.Intrinsics.Arm;
 using ArgumentParsers;
@@ -11,6 +12,7 @@ class FileSync
     static bool copy = true;
     static bool sync = false;
     static bool replicate = false;
+    static bool daemonMode = false;
     static List<string> searchPatterns = new List<string>();
 
     static ConsoleColor defaultColor = Console.ForegroundColor;
@@ -21,10 +23,10 @@ class FileSync
         // Setup
         ConsoleColor defaultColor = Console.ForegroundColor;
         printBanner();
-        Console.CancelKeyPress += new ConsoleCancelEventHandler(handler);
+        Console.CancelKeyPress += new ConsoleCancelEventHandler(cancelHandler);
 
         // Gather Input Args
-        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "csrf:");
+        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdsrf:");
         try
         {
             parser.parseArgs();
@@ -38,7 +40,7 @@ class FileSync
         }
 
         // Perform Specified Operation
-        BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest());
+        BinaryFileSynchronizer fs = new BinaryFileSynchronizer(parser.getSrc(), parser.getDest(), daemonMode);
         try
         {
             if (copy)
@@ -61,6 +63,15 @@ class FileSync
             Environment.Exit(1);
         }
 
+        // Daemon mode
+        if (daemonMode)
+        {
+            while (true)
+            {
+                Thread.Sleep(30000);
+            }
+        }
+
         // Exit
         Environment.Exit(0);
     }
@@ -73,6 +84,12 @@ class FileSync
             copy = true;
             sync = false;
             replicate = false;
+        }
+
+        if (parser.hasArg("-d"))
+        {
+            Console.WriteLine("Daemon mode set!");
+            daemonMode = true;
         }
 
         if (parser.hasArg("-s"))
@@ -105,7 +122,7 @@ class FileSync
     }
 
     // Interrupt handler
-    static void handler(object sender, ConsoleCancelEventArgs args)
+    static void cancelHandler(object sender, ConsoleCancelEventArgs args)
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[INTERRUPT] ");
