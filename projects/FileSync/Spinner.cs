@@ -39,7 +39,7 @@ namespace TerminalUtils
         public void stop()
         {
             active = false;
-            draw(' ');
+            draw('X');
             Console.WriteLine();
         }
 
@@ -59,7 +59,7 @@ namespace TerminalUtils
         {
             Console.SetCursorPosition(left, top);
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write(c);
+            Console.Write($"[{c}]");
         }
 
         // Turn the spinner

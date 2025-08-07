@@ -13,16 +13,22 @@ namespace FileUtils
 
         static string destination = "";
 
+        private int consoleLeft;
+        private int consoleTop;
+
         // Constructor
         public SyncMonitor(string src, string dest)
         {
             source = src;
             destination = dest;
+
+            consoleLeft = 0;
         }
 
         // Activate Daemon Mode
         public void activateDaemon()
         {
+            resetCursor();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("[ACTIVATE DAEMON]");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -103,6 +109,7 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
+                resetCursor();
                 Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
             }
         }
@@ -116,6 +123,7 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
+                resetCursor();
                 Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
             }
         }
@@ -129,6 +137,7 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
+                resetCursor();
                 Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
             }
         }
@@ -142,8 +151,16 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
+                resetCursor();
                 Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
             }
+        }
+
+        // Reset Cursor Position
+        private void resetCursor()
+        {
+            consoleTop = Console.GetCursorPosition().Top;
+            Console.SetCursorPosition(consoleLeft, consoleTop);
         }
     }
 }
