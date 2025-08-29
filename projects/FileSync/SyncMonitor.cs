@@ -27,7 +27,7 @@ namespace FileUtils
             consoleLeft = 0;
         }
 
-        // Activate Daemon Mode
+        // Activate daemon mode
         public void activateDaemon()
         {
             resetCursor();
@@ -135,7 +135,7 @@ namespace FileUtils
             return true;
         }
 
-        // Make Directory
+        // Make directory
         private static void createDirectory(string dir)
         {
             try
@@ -144,12 +144,11 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::makeDirectory(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Rename Directory
+        // Rename directory
         private static void renameDirectory(string oldDir, string newDir)
         {
             try
@@ -158,12 +157,11 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::renameDirectory(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Delete Directory
+        // Delete directory
         private static void deleteDirectory(string dir)
         {
             DirectoryInfo directory = new DirectoryInfo(dir);
@@ -186,12 +184,11 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::deleteDirectory(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Copy File
+        // Copy file
         private static void copyFile(string srcFile, string destFile, bool overwrite)
         {
             try
@@ -200,12 +197,11 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Update File
+        // Update file
         private static void updateFile(string srcFile, string destFile)
         {
             string backupFile = destFile + ".bac";
@@ -215,12 +211,11 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::updateFile(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Rename File
+        // Rename file
         private static void renameFile(string oldFile, string newFile)
         {
             try
@@ -229,12 +224,11 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::renameFile(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Delete File
+        // Delete file
         private static void deleteFile(string file)
         {
             try
@@ -243,19 +237,18 @@ namespace FileUtils
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::deleteFile(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
-        // Reset Cursor Position
+        // Reset cursor position
         private static void resetCursor()
         {
             consoleTop = Console.GetCursorPosition().Top;
             Console.SetCursorPosition(consoleLeft, consoleTop);
         }
 
-        // Print Copy
+        // Print copy
         private static void printCopy(string file)
         {
             resetCursor();
@@ -264,7 +257,7 @@ namespace FileUtils
             printItemName(file);
         }
 
-        // Print Make Directory
+        // Print make directory
         private static void printMakeDir(string dir)
         {
             resetCursor();
@@ -273,7 +266,7 @@ namespace FileUtils
             printItemName(dir);
         }
 
-        // Print Overwrite
+        // Print overwrite
         private static void printOverwrite(string file)
         {
             resetCursor();
@@ -282,7 +275,7 @@ namespace FileUtils
             printItemName(file);
         }
 
-        // Print Rename
+        // Print rename
         private static void printRename(string oldName, string newName)
         {
             resetCursor();
@@ -292,7 +285,7 @@ namespace FileUtils
             Console.WriteLine($"{oldName} -> {newName}");
         }
 
-        // Print Delete
+        // Print delete
         private static void printDelete(string name)
         {
             resetCursor();
@@ -301,11 +294,21 @@ namespace FileUtils
             printItemName(name);
         }
 
-        // Print File Name
+        // Print file name
         private static void printItemName(string item)
         {
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{item}");
+        }
+
+        // Error
+        private static void error(Exception e)
+        {
+            resetCursor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("[ERROR] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine($"{e.Message}");
         }
     }
 }
