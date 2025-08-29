@@ -38,9 +38,12 @@ namespace TerminalUtils
         // Stop animation
         public void stop()
         {
-            active = false;
-            draw('X');
-            Console.WriteLine();
+            if (active)
+            {
+                active = false;
+                draw('X');
+                Console.WriteLine();
+            }
         }
 
         // Spin

@@ -24,7 +24,6 @@ class FileSync
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.CancelKeyPress += new ConsoleCancelEventHandler(cancelHandler);
         printBanner();
-        s.start();
 
         // Gather Input Args
         FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdsrf:");
@@ -39,6 +38,7 @@ class FileSync
         }
 
         // Perform Initial Operation
+        s.start();
         if (copy || sync || replicate)
         {
             try
