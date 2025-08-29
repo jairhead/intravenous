@@ -34,7 +34,7 @@ namespace FileUtils {
                 consoleLeft = 0;
 
                 resetCursor();
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("[INDEXING SRC DIRECTORY] ");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{this.src.FullName}");
@@ -42,22 +42,22 @@ namespace FileUtils {
                 sortDirs(srcDirs);
 
                 resetCursor();
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("[INDEXING SRC FILES]");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(srcFiles);
 
                 resetCursor();
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.Write("[INDEXING DEST DIRECTORY] ");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{this.dest.FullName}");
                 destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
                 sortDirs(destDirs);
-                
+
                 resetCursor();
-                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("[INDEXING DEST FILES] ");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
@@ -184,11 +184,7 @@ namespace FileUtils {
                 string destDirName = dest.FullName + dir.FullName.Substring(src.FullName.Length);
                 if (!containsDir(destDirs, destDirName))
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("[MAKE DIR] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{destDirName}");
+                    printMakeDir(destDirName);
                     makeDirectory(destDirName);
                 }
             }
@@ -199,20 +195,12 @@ namespace FileUtils {
                 string destFileName = dest.FullName + file.FullName.Substring(src.FullName.Length);
                 if (!containsFile(destFiles, destFileName))
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("[COPY] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{file.Name} -> {destFileName}");
+                    printCopy(destFileName);
                     copyFile(file, destFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(destFileName)) > 0)
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("[OVERWRITE] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{destFileName}");
+                    printOverwrite(destFileName);
                     copyFile(file, destFileName, true);
                 }
             }
@@ -233,11 +221,7 @@ namespace FileUtils {
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("[MAKE DIR] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{srcDirName}");
+                    printMakeDir(srcDirName);
                     makeDirectory(srcDirName);
                 }
             }
@@ -248,20 +232,12 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("[COPY] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{file.Name} -> {srcFileName}");
+                    printCopy(srcFileName);
                     copyFile(file, srcFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("[OVERWRITE] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{srcFileName}");
+                    printOverwrite(srcFileName);
                     copyFile(file, srcFileName, true);
                 }
             }
@@ -276,11 +252,7 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("[DELETE] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{file.Name}");
+                    printDelete(file.FullName);
                     deleteFile(file.FullName);
                 }
             }
@@ -292,11 +264,7 @@ namespace FileUtils {
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
-                    resetCursor();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("[RM DIR] ");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                    Console.WriteLine($"{dir.FullName}");
+                    printDelete(dir.FullName);
                     deleteDirectory(dir.FullName);
                 }
             }
@@ -311,8 +279,7 @@ namespace FileUtils {
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
@@ -325,8 +292,7 @@ namespace FileUtils {
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::copy(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
@@ -339,8 +305,7 @@ namespace FileUtils {
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
@@ -353,8 +318,7 @@ namespace FileUtils {
             }
             catch (UnauthorizedAccessException e)
             {
-                resetCursor();
-                Console.WriteLine($"BinaryFileSynchronizer::copyFile(): [ERROR] {e.Message}");
+                error(e);
             }
         }
 
@@ -467,6 +431,58 @@ namespace FileUtils {
         {
             consoleTop = Console.GetCursorPosition().Top;
             Console.SetCursorPosition(consoleLeft, consoleTop);
+        }
+
+        // Print Copy
+        private void printCopy(string fileName)
+        {
+            resetCursor();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("[CP] ");
+            printItemName(fileName);
+        }
+
+        // Print Make Directory
+        private void printMakeDir(string dirName)
+        {
+            resetCursor();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("[MK DIR] ");
+            printItemName(dirName);
+        }
+
+        // Print Overwrite
+        private void printOverwrite(string fileName)
+        {
+            resetCursor();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("[OVR] ");
+            printItemName(fileName);
+        }
+
+        private void printDelete(string name)
+        {
+            resetCursor();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("[DEL] ");
+            printItemName(name);
+        }
+
+        // Print File Name
+        private void printItemName(string itemName)
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine($"{itemName}");
+        }
+        
+        // Error
+        private void error(Exception e)
+        {
+            resetCursor();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("[ERROR] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine($"{e.Message}");
         }
     }
 }
