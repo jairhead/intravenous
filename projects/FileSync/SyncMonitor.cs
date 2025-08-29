@@ -142,7 +142,7 @@ namespace FileUtils
             {
                 Directory.CreateDirectory(dir);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -155,7 +155,7 @@ namespace FileUtils
             {
                 Directory.Move(oldDir, newDir);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -195,7 +195,7 @@ namespace FileUtils
             {
                 File.Copy(srcFile, destFile, overwrite);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -208,7 +208,7 @@ namespace FileUtils
             {
                 File.Move(oldFile, newFile);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -221,7 +221,7 @@ namespace FileUtils
             {
                 File.Delete(file);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
