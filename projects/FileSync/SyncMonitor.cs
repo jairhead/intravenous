@@ -201,20 +201,6 @@ namespace FileUtils
             }
         }
 
-        // Update file
-        private static void updateFile(string srcFile, string destFile)
-        {
-            string backupFile = destFile + ".bac";
-            try
-            {
-                File.Replace(srcFile, destFile, backupFile);
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                error(e);
-            }
-        }
-
         // Rename file
         private static void renameFile(string oldFile, string newFile)
         {
