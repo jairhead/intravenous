@@ -35,6 +35,7 @@ class FileSync
         catch (Exception e)
         {
             error(e);
+            exit(1);
         }
 
         // Perform Initial Operation
@@ -83,8 +84,7 @@ class FileSync
         }
 
         // Exit
-        s.stop();
-        Environment.Exit(0);
+        exit(0);
     }
 
     // Helper method for setting program flags
@@ -134,23 +134,11 @@ class FileSync
     // Interrupt handler
     static void cancelHandler(object sender, ConsoleCancelEventArgs args)
     {
-        s.stop();
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.Write("[INTERRUPT] ");
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.WriteLine("Exiting program.");
-        Environment.Exit(0);
-    }
-
-    // Error
-    static void error(Exception e)
-    {
-        s.stop();
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.Write("[ERROR] ");
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine($"{e.Message}");
-        Environment.Exit(1);
+        exit(0);
     }
 
     // Print the banner for the program
@@ -178,5 +166,21 @@ class FileSync
             Console.WriteLine(line);
             Thread.Sleep(20);
         }
+    }
+
+    // Error
+    static void error(Exception e)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write("[ERROR] ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine($"{e.Message}");
+    }
+
+    // Exit
+    static void exit(int code)
+    {
+        s.stop();
+        Environment.Exit(code);
     }
 }

@@ -277,7 +277,7 @@ namespace FileUtils {
             {
                 Directory.CreateDirectory(dirName);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -290,7 +290,7 @@ namespace FileUtils {
             {
                 Directory.Delete(dirName);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -303,7 +303,7 @@ namespace FileUtils {
             {
                 file.CopyTo(fileName, overwrite);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
@@ -316,7 +316,7 @@ namespace FileUtils {
             {
                 File.Delete(fileName);
             }
-            catch (UnauthorizedAccessException e)
+            catch (Exception e)
             {
                 error(e);
             }
