@@ -41,7 +41,7 @@ namespace TerminalUtils
             if (active)
             {
                 active = false;
-                draw('X');
+                draw('X', ConsoleColor.Red);
                 Console.WriteLine();
             }
         }
@@ -58,17 +58,17 @@ namespace TerminalUtils
         }
 
         // Draw a character
-        private void draw(char c)
+        private void draw(char c, ConsoleColor color)
         {
             Console.SetCursorPosition(left, top);
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ForegroundColor = color;
             Console.Write($"[{c}]");
         }
 
         // Turn the spinner
         private void turn()
         {
-            draw(sequence[++counter % sequence.Length]);
+            draw(sequence[++counter % sequence.Length], ConsoleColor.Cyan);
         }
     }
 }
