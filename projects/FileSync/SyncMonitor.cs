@@ -18,6 +18,8 @@ namespace FileUtils
         private int consoleLeft;
         private int consoleTop;
 
+        bool renamedFile = false;
+
         // Constructor
         public SyncMonitor(string src, string dest)
         {
@@ -63,10 +65,14 @@ namespace FileUtils
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(e.FullPath))
+            if (isFile(e.FullPath) && !renamedFile)
             {
                 printOverwrite(destName);
                 copyFile(e.FullPath, destName, true);
+            }
+            else if (isFile(e.FullPath))
+            {
+                renamedFile = false;
             }
         }
 
@@ -95,6 +101,7 @@ namespace FileUtils
             {
                 printRename(oldDestName, newDestName);
                 renameFile(oldDestName, newDestName);
+                renamedFile = true;
             }
             else if (isDirectory(e.FullPath))
             {
