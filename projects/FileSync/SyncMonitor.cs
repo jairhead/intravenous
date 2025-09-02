@@ -126,10 +126,17 @@ namespace FileUtils
         // Check for file or dir
         private static bool isFile(string name)
         {
-            FileAttributes attr = File.GetAttributes(name);
-
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            try
             {
+                FileAttributes attr = File.GetAttributes(name);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                error(e);
                 return false;
             }
             return true;
