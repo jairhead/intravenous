@@ -28,6 +28,16 @@ namespace FileUtils {
         {
             try
             {
+                if (!src.EndsWith('/'))
+                {
+                    src += "/";
+                }
+
+                if (!dest.EndsWith('/'))
+                {
+                    dest += "/";
+                }
+
                 this.src = new DirectoryInfo(src);
                 this.dest = new DirectoryInfo(dest);
 
