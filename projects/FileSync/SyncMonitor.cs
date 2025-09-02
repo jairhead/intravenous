@@ -91,13 +91,14 @@ namespace FileUtils
         {
             string oldDestName = destination + e.OldFullPath.Substring(source.Length);
             string newDestName = destination + e.FullPath.Substring(source.Length);
-            printRename(oldDestName, newDestName);
             if (isFile(e.FullPath))
             {
+                printRename(oldDestName, newDestName);
                 renameFile(oldDestName, newDestName);
             }
             else if (isDirectory(e.FullPath))
             {
+                printRename(oldDestName, newDestName);
                 renameDirectory(oldDestName, newDestName);
             }
         }
@@ -106,13 +107,14 @@ namespace FileUtils
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            printDelete(destName);
             if (isFile(destName))
             {
+                printDelete(destName);
                 deleteFile(destName);
             }
             else if (isDirectory(destName))
             {
+                printDelete(destName);
                 deleteDirectory(destName);
             }
         }
