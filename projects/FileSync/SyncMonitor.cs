@@ -63,7 +63,7 @@ namespace FileUtils
         private static void OnChanged(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(e.FullPath))
+            if (isFile(e.FullPath) == 1)
             {
                 printOverwrite(destName);
                 copyFile(e.FullPath, destName, true);
@@ -74,12 +74,13 @@ namespace FileUtils
         private static void OnCreated(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(e.FullPath))
+            int file = isFile(e.FullPath);
+            if (file == 1)
             {
                 printCopy(destName);
                 copyFile(e.FullPath, destName, false);
             }
-            else
+            else if (file == 0)
             {
                 printMakeDir(destName);
                 createDirectory(destName);
@@ -91,12 +92,13 @@ namespace FileUtils
         {
             string oldDestName = destination + e.OldFullPath.Substring(source.Length);
             string newDestName = destination + e.FullPath.Substring(source.Length);
+            int file = isFile(e.FullPath);
             printRename(oldDestName, newDestName);
-            if (isFile(e.FullPath))
+            if (file == 1)
             {
                 renameFile(oldDestName, newDestName);
             }
-            else
+            else if (file == 0)
             {
                 renameDirectory(oldDestName, newDestName);
             }
@@ -106,12 +108,13 @@ namespace FileUtils
         private static void OnDeleted(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
+            int file = isFile(e.FullPath);
             printDelete(destName);
-            if (isFile(destName))
+            if (file == 1)
             {
                 deleteFile(destName);
             }
-            else
+            else if (file == 0)
             {
                 deleteDirectory(destName);
             }
@@ -124,22 +127,22 @@ namespace FileUtils
         }
 
         // Check for file or dir
-        private static bool isFile(string name)
+        private static int isFile(string name)
         {
             try
             {
                 FileAttributes attr = File.GetAttributes(name);
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
-                    return false;
+                    return 0;
                 }
             }
             catch (Exception e)
             {
                 error(e);
-                return false;
+                return -1;
             }
-            return true;
+            return 1;
         }
 
         // Make directory
