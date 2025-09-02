@@ -10,13 +10,13 @@ namespace FileUtils
     public class SyncMonitor
     {
         // Members
-        static string source = "";
+        string source = "";
         FileSystemWatcher srcWatcher;
 
-        static string destination = "";
+        string destination = "";
 
-        static private int consoleLeft;
-        static private int consoleTop;
+        private int consoleLeft;
+        private int consoleTop;
 
         // Constructor
         public SyncMonitor(string src, string dest)
@@ -60,7 +60,7 @@ namespace FileUtils
         }
 
         // Changed callback
-        private static void OnChanged(object sender, FileSystemEventArgs e)
+        private void OnChanged(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
             if (isFile(e.FullPath))
@@ -71,7 +71,7 @@ namespace FileUtils
         }
 
         // Created callback
-        private static void OnCreated(object sender, FileSystemEventArgs e)
+        private void OnCreated(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
             if (isFile(e.FullPath))
@@ -87,7 +87,7 @@ namespace FileUtils
         }
 
         // Renamed callback
-        private static void OnRenamed(object sender, RenamedEventArgs e)
+        private void OnRenamed(object sender, RenamedEventArgs e)
         {
             string oldDestName = destination + e.OldFullPath.Substring(source.Length);
             string newDestName = destination + e.FullPath.Substring(source.Length);
@@ -103,7 +103,7 @@ namespace FileUtils
         }
 
         // Deleted callback
-        private static void OnDeleted(object sender, FileSystemEventArgs e)
+        private void OnDeleted(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
             printDelete(destName);
@@ -118,13 +118,13 @@ namespace FileUtils
         }
 
         // Error callback
-        private static void OnError(object sender, ErrorEventArgs e)
+        private void OnError(object sender, ErrorEventArgs e)
         {
             throw new Exception(e.GetException().Message);
         }
 
         // Check if name is file
-        private static bool isFile(string name)
+        private bool isFile(string name)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace FileUtils
         }
 
         // Check if name is directory
-        private static bool isDirectory(string name) {
+        private bool isDirectory(string name) {
             try
             {
                 if (Directory.Exists(name))
@@ -157,7 +157,7 @@ namespace FileUtils
         }
 
         // Make directory
-        private static void createDirectory(string dir)
+        private void createDirectory(string dir)
         {
             try
             {
@@ -170,7 +170,7 @@ namespace FileUtils
         }
 
         // Rename directory
-        private static void renameDirectory(string oldDir, string newDir)
+        private void renameDirectory(string oldDir, string newDir)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace FileUtils
         }
 
         // Delete directory
-        private static void deleteDirectory(string dir)
+        private void deleteDirectory(string dir)
         {
             DirectoryInfo directory = new DirectoryInfo(dir);
             DirectoryInfo[] subdirectories = directory.GetDirectories("*.*", SearchOption.AllDirectories);
@@ -210,7 +210,7 @@ namespace FileUtils
         }
 
         // Copy file
-        private static void copyFile(string srcFile, string destFile, bool overwrite)
+        private void copyFile(string srcFile, string destFile, bool overwrite)
         {
             try
             {
@@ -223,7 +223,7 @@ namespace FileUtils
         }
 
         // Rename file
-        private static void renameFile(string oldFile, string newFile)
+        private void renameFile(string oldFile, string newFile)
         {
             try
             {
@@ -236,7 +236,7 @@ namespace FileUtils
         }
 
         // Delete file
-        private static void deleteFile(string file)
+        private void deleteFile(string file)
         {
             try
             {
@@ -249,14 +249,14 @@ namespace FileUtils
         }
 
         // Reset cursor position
-        private static void resetCursor()
+        private void resetCursor()
         {
             consoleTop = Console.GetCursorPosition().Top;
             Console.SetCursorPosition(consoleLeft, consoleTop);
         }
 
         // Print copy
-        private static void printCopy(string file)
+        private void printCopy(string file)
         {
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -265,7 +265,7 @@ namespace FileUtils
         }
 
         // Print make directory
-        private static void printMakeDir(string dir)
+        private void printMakeDir(string dir)
         {
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Green;
@@ -274,7 +274,7 @@ namespace FileUtils
         }
 
         // Print overwrite
-        private static void printOverwrite(string file)
+        private void printOverwrite(string file)
         {
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -283,7 +283,7 @@ namespace FileUtils
         }
 
         // Print rename
-        private static void printRename(string oldName, string newName)
+        private void printRename(string oldName, string newName)
         {
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -293,7 +293,7 @@ namespace FileUtils
         }
 
         // Print delete
-        private static void printDelete(string name)
+        private void printDelete(string name)
         {
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Red;
@@ -302,14 +302,14 @@ namespace FileUtils
         }
 
         // Print file name
-        private static void printItemName(string item)
+        private void printItemName(string item)
         {
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{item}");
         }
 
         // Error
-        private static void error(Exception e)
+        private void error(Exception e)
         {
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Red;
