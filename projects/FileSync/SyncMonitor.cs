@@ -267,36 +267,40 @@ namespace FileUtils
         // Print copy
         private void printCopy(string file)
         {
+            DateTime t = DateTime.Now;
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("[CP] ");
+            Console.Write($"[CP | {t}] ");
             printItemName(file);
         }
 
         // Print make directory
         private void printMakeDir(string dir)
         {
+            DateTime t = DateTime.Now;
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("[MK DIR] ");
+            Console.Write($"[MK DIR | {t}] ");
             printItemName(dir);
         }
 
         // Print overwrite
         private void printOverwrite(string file)
         {
+            DateTime t = DateTime.Now;
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("[OVERWRITE] ");
+            Console.Write($"[OVERWRITE | {t}] ");
             printItemName(file);
         }
 
         // Print rename
         private void printRename(string oldName, string newName)
         {
+            DateTime t = DateTime.Now;
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("[RENAME] ");
+            Console.Write($"[RENAME | {t}] ");
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine($"{oldName} -> {newName}");
         }
@@ -304,9 +308,10 @@ namespace FileUtils
         // Print delete
         private void printDelete(string name)
         {
+            DateTime t = DateTime.Now;
             resetCursor();
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("[DEL] ");
+            Console.Write($"[DEL | {t}] ");
             printItemName(name);
         }
 
