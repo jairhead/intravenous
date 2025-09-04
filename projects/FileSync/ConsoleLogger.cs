@@ -56,6 +56,17 @@ namespace FileUtils
             }
         }
 
+        // Write Line (Overload)
+        public static void WriteLine()
+        {
+            lock (__printLock)
+            {
+                resetCursor();
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine();
+            }
+        }
+
         // Write Two-Color Line
         public static void WriteTwoColorLine(ConsoleColor color1, string text1, ConsoleColor color2, string text2)
         {
@@ -66,17 +77,6 @@ namespace FileUtils
                 Console.Write(text1);
                 Console.ForegroundColor = color2;
                 Console.WriteLine(text2);
-            }
-        }
-
-        // Write Line (Overload)
-        public static void WriteLine()
-        {
-            lock (__printLock)
-            {
-                resetCursor();
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine();
             }
         }
 
