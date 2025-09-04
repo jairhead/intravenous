@@ -15,9 +15,6 @@ namespace FileUtils
 
         string destination = "";
 
-        private int consoleLeft;
-        private int consoleTop;
-
         bool renamedFile = false;
 
         // Constructor
@@ -25,18 +22,12 @@ namespace FileUtils
         {
             source = src;
             destination = dest;
-
-            consoleLeft = 0;
         }
 
         // Activate daemon mode
         public void activateDaemon()
         {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("[ACTIVATE DAEMON]");
-            Console.ForegroundColor = ConsoleColor.Gray;
-
+            ConsoleLogger.WriteLine(ConsoleColor.Cyan, "[ACTIVATE DAEMON]");
             setUpSrcWatcher();
         }
 
@@ -257,79 +248,51 @@ namespace FileUtils
             }
         }
 
-        // Reset cursor position
-        private void resetCursor()
-        {
-            consoleTop = Console.GetCursorPosition().Top;
-            Console.SetCursorPosition(consoleLeft, consoleTop);
-        }
-
         // Print copy
         private void printCopy(string file)
         {
             DateTime t = DateTime.Now;
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"[CP | {t}] ");
-            printItemName(file);
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, $"[CP | {t}]",
+                                            ConsoleColor.Gray, $"{file}");
         }
 
         // Print make directory
         private void printMakeDir(string dir)
         {
             DateTime t = DateTime.Now;
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"[MK DIR | {t}] ");
-            printItemName(dir);
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, $"[MKDIR | {t}] ",
+                                            ConsoleColor.Gray, $"{dir}");
         }
 
         // Print overwrite
         private void printOverwrite(string file)
         {
             DateTime t = DateTime.Now;
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write($"[OVERWRITE | {t}] ");
-            printItemName(file);
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, $"[OVRWRT | {t}] ",
+                                            ConsoleColor.Gray, $"{file}");
         }
 
         // Print rename
         private void printRename(string oldName, string newName)
         {
             DateTime t = DateTime.Now;
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write($"[RENAME | {t}] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{oldName} -> {newName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, $"[RENAME | {t}] ",
+                                            ConsoleColor.Gray, $"{oldName} -> {newName}");
         }
 
         // Print delete
         private void printDelete(string name)
         {
             DateTime t = DateTime.Now;
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write($"[DEL | {t}] ");
-            printItemName(name);
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, $"[DEL | {t}] ",
+                                            ConsoleColor.Gray, $"{name}");
         }
-
-        // Print file name
-        private void printItemName(string item)
-        {
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{item}");
-        }
-
+        
         // Error
         private void error(Exception e)
         {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("[ERROR] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{e.Message}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, $"[ERROR] ",
+                                            ConsoleColor.Gray, $"{e.Message}");
         }
     }
 }

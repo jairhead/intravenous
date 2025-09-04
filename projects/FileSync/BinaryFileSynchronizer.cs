@@ -20,9 +20,6 @@ namespace FileUtils {
         DirectoryInfo[] destDirs;
         FileInfo[] destFiles;
 
-        private int consoleLeft;
-        private int consoleTop;
-
         // Constructor
         public BinaryFileSynchronizer(string src, string dest)
         {
@@ -40,8 +37,6 @@ namespace FileUtils {
 
                 this.src = new DirectoryInfo(src);
                 this.dest = new DirectoryInfo(dest);
-
-                consoleLeft = 0;
 
                 ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[INDEXING SRC DIRECTORY] ",
                                                 ConsoleColor.Gray, $"{this.src.FullName}");
@@ -70,14 +65,12 @@ namespace FileUtils {
         // Synchronize files src <-> dest
         public override void synchronize()
         {
-            resetCursor();
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START SYNC] ",
                                             ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
             copyBackward();
 
-            resetCursor();
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH SYNC] ",
                                             ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
         }
@@ -85,13 +78,11 @@ namespace FileUtils {
         // Copy files src -> dest
         public override void copy()
         {
-            resetCursor();
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START COPY] ",
                                             ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
 
-            resetCursor();
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH COPY] ",
                                             ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
         }
@@ -99,14 +90,12 @@ namespace FileUtils {
         // Replicate (destructive copy) src -> dest
         public override void replicate()
         {
-            resetCursor();
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START REPLICATE] ",
                                             ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
             deleteBackward();
 
-            resetCursor();
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH REPLICATE] ",
                                             ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
         }
@@ -374,13 +363,6 @@ namespace FileUtils {
                 return true;
             }
             return false;
-        }
-
-        // Reset Cursor Position
-        private void resetCursor()
-        {
-            consoleTop = Console.GetCursorPosition().Top;
-            Console.SetCursorPosition(consoleLeft, consoleTop);
         }
 
         // Error
