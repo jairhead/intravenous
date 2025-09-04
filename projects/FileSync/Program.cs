@@ -134,10 +134,7 @@ class FileSync
     // Interrupt handler
     static void cancelHandler(object sender, ConsoleCancelEventArgs args)
     {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.Write("[INTERRUPT] ");
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("Exiting program.");
+        ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[INTERRUPT] ", ConsoleColor.Gray, "Exiting program.");
         exit(0);
     }
 
@@ -156,7 +153,7 @@ class FileSync
             "  .&$:  x&&x   &&;  :$&;      :&$:     ;$&x      .x$+      .X&$:  x+.     :$&+ .X&;  ;$.     .X&+  ",
             "  .&$:   xx    &&;  :$&;      :&$:       X&&&$X$&&&$&&&$X$&&&x    x&&&$xx&&&+  .X&;  +$&&$xx$&&X.  ",
             "   x+.         xx.  .+x.      .x+.         :xXXX+.   :xXXX+.        .+XXXx:     +x:     ;xXXx;     ",
-            "                                                                                                   "                                                                                
+            "                                                                                                   "
         };
 
         foreach (string line in banner)
@@ -169,10 +166,7 @@ class FileSync
     // Error
     static void error(Exception e)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.Write("[ERROR] ");
-        Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine($"{e.Message}");
+        ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[ERROR] ", ConsoleColor.Gray, $"{e.Message}");
     }
 
     // Exit

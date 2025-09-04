@@ -63,6 +63,8 @@ namespace FileUtils {
                 Console.Write("[INDEXING DEST DIRECTORY] ");
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine($"{this.dest.FullName}");
+                //ConsoleLogger.Write(ConsoleColor.Cyan, "[INDEXING DEST DIRECTORY] ");
+                //ConsoleLogger.WriteLine($"{this.dest.FullName}");
                 destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
                 sortDirs(destDirs);
 

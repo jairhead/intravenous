@@ -2,6 +2,7 @@
 // Contains the Spinner class
 
 using System.ComponentModel;
+using FileUtils;
 
 namespace TerminalUtils
 {
@@ -19,8 +20,8 @@ namespace TerminalUtils
         // Constructor
         public Spinner(int delay = 100)
         {
-            this.left = Console.GetCursorPosition().Left;
-            this.top = Console.GetCursorPosition().Top;
+            left = Console.GetCursorPosition().Left;
+            top = Console.GetCursorPosition().Top;
             this.delay = delay;
             thread = new Thread(spin);
         }
@@ -42,7 +43,7 @@ namespace TerminalUtils
             {
                 active = false;
                 draw('X', ConsoleColor.Red);
-                Console.WriteLine();
+                ConsoleLogger.WriteLine();
             }
         }
 
@@ -51,7 +52,7 @@ namespace TerminalUtils
         {
             while (active)
             {
-                top = Console.GetCursorPosition().Top;
+                //top = Console.GetCursorPosition().Top;
                 turn();
                 Thread.Sleep(delay);
             }
@@ -60,9 +61,10 @@ namespace TerminalUtils
         // Draw a character
         private void draw(char c, ConsoleColor color)
         {
-            Console.SetCursorPosition(left, top);
+            /*Console.SetCursorPosition(left, top);
             Console.ForegroundColor = color;
-            Console.Write($"[{c}]");
+            Console.Write($"[{c}]");*/
+            ConsoleLogger.Write(color, $"[{c}]");
         }
 
         // Turn the spinner
