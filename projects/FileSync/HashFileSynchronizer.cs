@@ -53,50 +53,6 @@ namespace FileUtils {
             }
         }
 
-        // List Src Dirs
-        public override void listSrcDirs()
-        {
-            Console.WriteLine("Source Directories:");
-            foreach (DirectoryInfo dir in srcDirs)
-            {
-                Console.WriteLine(dir.Name);
-            }
-            Console.WriteLine();
-        }
-
-        // List Src Files
-        public override void listSrcFiles()
-        {
-            Console.WriteLine("Source Files:");
-            foreach (FileInfo file in srcFiles)
-            {
-                Console.WriteLine(file.FullName);
-            }
-            Console.WriteLine();
-        }
-
-        // List Dest Dirs
-        public override void listDestDirs()
-        {
-            Console.WriteLine("Destination Directories:");
-            foreach (DirectoryInfo dir in destDirs)
-            {
-                Console.WriteLine(dir.FullName);
-            }
-            Console.WriteLine();
-        }
-
-        // List Dest Files
-        public override void listDestFiles()
-        {
-            Console.WriteLine("Destionation Files:");
-            foreach (FileInfo file in destFiles)
-            {
-                Console.WriteLine(file.Name);
-            }
-            Console.WriteLine();
-        }
-
         // Synchronize files src <-> dest
         public override void synchronize()
         {

@@ -43,35 +43,21 @@ namespace FileUtils {
 
                 consoleLeft = 0;
 
-                resetCursor();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write("[INDEXING SRC DIRECTORY] ");
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"{this.src.FullName}");
+                ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[INDEXING SRC DIRECTORY] ",
+                                                ConsoleColor.Gray, $"{this.src.FullName}");
                 srcDirs = this.src.GetDirectories("*.*", SearchOption.AllDirectories);
                 sortDirs(srcDirs);
 
-                resetCursor();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("[INDEXING SRC FILES]");
-                Console.ForegroundColor = ConsoleColor.Gray;
+                ConsoleLogger.WriteLine(ConsoleColor.Cyan, "[INDEXING SRC FILES]");
                 srcFiles = this.src.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(srcFiles);
 
-                resetCursor();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write("[INDEXING DEST DIRECTORY] ");
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine($"{this.dest.FullName}");
-                //ConsoleLogger.Write(ConsoleColor.Cyan, "[INDEXING DEST DIRECTORY] ");
-                //ConsoleLogger.WriteLine($"{this.dest.FullName}");
+                ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[INDEXING DEST DIRECTORY] ",
+                                                ConsoleColor.Gray, $"{this.dest.FullName}");
                 destDirs = this.dest.GetDirectories("*.*", SearchOption.AllDirectories);
                 sortDirs(destDirs);
 
-                resetCursor();
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("[INDEXING DEST FILES] ");
-                Console.ForegroundColor = ConsoleColor.Gray;
+                ConsoleLogger.WriteLine(ConsoleColor.Cyan, "[INDEXING DEST FILES]");
                 destFiles = this.dest.GetFiles("*.*", SearchOption.AllDirectories);
                 sortFiles(destFiles);
             }
@@ -81,104 +67,48 @@ namespace FileUtils {
             }
         }
 
-        // List Src Dirs
-        public override void listSrcDirs()
-        {
-            Console.WriteLine("Source Directories:");
-            foreach (DirectoryInfo dir in srcDirs)
-            {
-                Console.WriteLine(dir.FullName.Remove(0, src.FullName.Length));
-            }
-            Console.WriteLine();
-        }
-
-        // List Src Files
-        public override void listSrcFiles()
-        {
-            Console.WriteLine("Source Files:");
-            foreach (FileInfo file in srcFiles)
-            {
-                Console.WriteLine(file.FullName.Remove(0, src.FullName.Length));
-            }
-            Console.WriteLine();
-        }
-
-        // List Dest Dirs
-        public override void listDestDirs()
-        {
-            Console.WriteLine("Destination Directories:");
-            foreach (DirectoryInfo dir in destDirs)
-            {
-                Console.WriteLine(dir.FullName.Remove(0, dest.FullName.Length));
-            }
-            Console.WriteLine();
-        }
-
-        // List Dest Files
-        public override void listDestFiles()
-        {
-            Console.WriteLine("Destination Files:");
-            foreach (FileInfo file in destFiles)
-            {
-                Console.WriteLine(file.FullName.Remove(0, dest.FullName.Length));
-            }
-            Console.WriteLine();
-        }
-
         // Synchronize files src <-> dest
         public override void synchronize()
         {
             resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("[START SYNC] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{src.FullName} <-> {dest.FullName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START SYNC] ",
+                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
             copyBackward();
 
             resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("[FINISH SYNC] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{src.FullName} <-> {dest.FullName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH SYNC] ",
+                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
         }
 
         // Copy files src -> dest
         public override void copy()
         {
             resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("[START COPY] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START COPY] ",
+                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
 
             resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("[FINISH COPY] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH COPY] ",
+                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
         }
 
         // Replicate (destructive copy) src -> dest
         public override void replicate()
         {
             resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("[START REPLICATE] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START REPLICATE] ",
+                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
 
             copyForward();
             deleteBackward();
 
             resetCursor();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("[FINISH REPLICATE] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{src.FullName} -> {dest.FullName}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH REPLICATE] ",
+                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
         }
 
         // Copy files src -> dest
@@ -196,7 +126,8 @@ namespace FileUtils {
                 string destDirName = dest.FullName + dir.FullName.Substring(src.FullName.Length);
                 if (!containsDir(destDirs, destDirName))
                 {
-                    printMakeDir(destDirName);
+                    //printMakeDir(destDirName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[MKDIR] ", ConsoleColor.Gray, $"{destDirName}");
                     makeDirectory(destDirName);
                 }
             }
@@ -207,12 +138,14 @@ namespace FileUtils {
                 string destFileName = dest.FullName + file.FullName.Substring(src.FullName.Length);
                 if (!containsFile(destFiles, destFileName))
                 {
-                    printCopy(destFileName);
+                    //printCopy(destFileName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[CP] ", ConsoleColor.Gray, $"{destFileName}");
                     copyFile(file, destFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(destFileName)) > 0)
                 {
-                    printOverwrite(destFileName);
+                    //printOverwrite(destFileName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, "[OVRWRT] ", ConsoleColor.Gray, $"{destFileName}");
                     copyFile(file, destFileName, true);
                 }
             }
@@ -233,7 +166,8 @@ namespace FileUtils {
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
-                    printMakeDir(srcDirName);
+                    //printMakeDir(srcDirName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[MKDIR] ", ConsoleColor.Gray, $"{srcDirName}");
                     makeDirectory(srcDirName);
                 }
             }
@@ -244,12 +178,14 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
-                    printCopy(srcFileName);
+                    //printCopy(srcFileName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[CP] ", ConsoleColor.Gray, $"{srcFileName}");
                     copyFile(file, srcFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
                 {
-                    printOverwrite(srcFileName);
+                    //printOverwrite(srcFileName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[CP] ", ConsoleColor.Gray, $"{srcFileName}");
                     copyFile(file, srcFileName, true);
                 }
             }
@@ -264,7 +200,8 @@ namespace FileUtils {
                 string srcFileName = src.FullName + file.FullName.Substring(dest.FullName.Length);
                 if (!containsFile(srcFiles, srcFileName))
                 {
-                    printDelete(file.FullName);
+                    //printDelete(file.FullName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[DEL] ", ConsoleColor.Gray, $"{file.FullName}");
                     deleteFile(file.FullName);
                 }
             }
@@ -276,7 +213,8 @@ namespace FileUtils {
                 string srcDirName = src.FullName + dir.FullName.Substring(dest.FullName.Length);
                 if (!containsDir(srcDirs, srcDirName))
                 {
-                    printDelete(dir.FullName);
+                    //printDelete(dir.FullName);
+                    ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[RMDIR] ", ConsoleColor.Gray, $"{dir.FullName}");
                     deleteDirectory(dir.FullName);
                 }
             }
@@ -445,56 +383,11 @@ namespace FileUtils {
             Console.SetCursorPosition(consoleLeft, consoleTop);
         }
 
-        // Print Copy
-        private void printCopy(string fileName)
-        {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("[CP] ");
-            printItemName(fileName);
-        }
-
-        // Print Make Directory
-        private void printMakeDir(string dirName)
-        {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("[MK DIR] ");
-            printItemName(dirName);
-        }
-
-        // Print Overwrite
-        private void printOverwrite(string fileName)
-        {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("[OVR] ");
-            printItemName(fileName);
-        }
-
-        private void printDelete(string name)
-        {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("[DEL] ");
-            printItemName(name);
-        }
-
-        // Print File Name
-        private void printItemName(string itemName)
-        {
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{itemName}");
-        }
-        
         // Error
         private void error(Exception e)
         {
-            resetCursor();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("[ERROR] ");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{e.Message}");
+            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[ERROR] ",
+                                            ConsoleColor.Gray, $"{e.Message}");
         }
     }
 }
