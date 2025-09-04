@@ -23,7 +23,7 @@ namespace FileUtils
             }
         }
 
-        // Write (Overloaded)
+        // Write (Overload)
         public static void Write(ConsoleColor color, string text)
         {
             lock (__printLock)
@@ -45,7 +45,7 @@ namespace FileUtils
             }
         }
 
-        // Write Line (Overloaded)
+        // Write Line (Overload)
         public static void WriteLine(ConsoleColor color, string text)
         {
             lock (__printLock)
