@@ -72,16 +72,10 @@ namespace TerminalUtils
             }
         }
 
-        // Draw a character
-        private void draw(char c, ConsoleColor color)
-        {
-            ConsoleLogger.Write(color, $"[{c}]");
-        }
-
         // Turn the spinner
         private void turn()
         {
-            draw(sequence[++counter % sequence.Length], ConsoleColor.Cyan);
+            ConsoleLogger.Write(ConsoleColor.Blue, $"[{sequence[++counter % sequence.Length]}]");
         }
     }
 }
