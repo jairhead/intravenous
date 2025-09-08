@@ -117,7 +117,7 @@ namespace FileUtils {
                 {
                     //printMakeDir(destDirName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[MKDIR] ", ConsoleColor.Gray, $"{destDirName}");
-                    makeDirectory(destDirName);
+                    DirectoryOps.CreateDirectory(destDirName);
                 }
             }
 
@@ -157,7 +157,7 @@ namespace FileUtils {
                 {
                     //printMakeDir(srcDirName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[MKDIR] ", ConsoleColor.Gray, $"{srcDirName}");
-                    makeDirectory(srcDirName);
+                    DirectoryOps.CreateDirectory(srcDirName);
                 }
             }
 
@@ -204,34 +204,8 @@ namespace FileUtils {
                 {
                     //printDelete(dir.FullName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[RMDIR] ", ConsoleColor.Gray, $"{dir.FullName}");
-                    deleteDirectory(dir.FullName);
+                    DirectoryOps.DeleteDirectory(dir.FullName);
                 }
-            }
-        }
-
-        // Make Directory
-        private void makeDirectory(string dirName)
-        {
-            try
-            {
-                Directory.CreateDirectory(dirName);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Delete Directory
-        private void deleteDirectory(string dirName)
-        {
-            try
-            {
-                Directory.Delete(dirName);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
             }
         }
 

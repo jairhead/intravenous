@@ -113,7 +113,7 @@ namespace FileUtils
             else if (DirectoryOps.IsDirectory(destName))
             {
                 printDelete(destName);
-                DirectoryOps.DeleteDirectory(destName);
+                DirectoryOps.DeleteDirectoryRecursive(destName);
             }
         }
 

@@ -60,8 +60,21 @@ namespace FileUtils
             }
         }
         
-        // Delete directory
-        public static void DeleteDirectory(string dir)
+        // Delete Directory
+        public static void DeleteDirectory(string dirName)
+        {
+            try
+            {
+                Directory.Delete(dirName);
+            }
+            catch (Exception e)
+            {
+                ConsoleLogger.Error(e);
+            }
+        }
+
+        // Delete directory recursive
+        public static void DeleteDirectoryRecursive(string dir)
         {
             lock (__directoryLock)
             {
