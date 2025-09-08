@@ -32,7 +32,7 @@ class FileSync
             Environment.Exit(0);
         }
 
-        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdhsrf:");
+        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdhsr");
 
         try
         {
@@ -129,11 +129,6 @@ class FileSync
             copy = false;
             sync = false;
             replicate = true;
-        }
-
-        if (parser.hasArg("-f"))
-        {
-            
         }
 
         return;
