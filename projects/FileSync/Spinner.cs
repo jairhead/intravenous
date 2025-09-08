@@ -18,8 +18,6 @@ namespace TerminalUtils
         // Constructor
         public Spinner(int delay = 100)
         {
-            left = Console.GetCursorPosition().Left;
-            top = Console.GetCursorPosition().Top;
             this.delay = delay;
             thread = new Thread(spin);
         }

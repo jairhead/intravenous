@@ -129,13 +129,13 @@ namespace FileUtils {
                 {
                     //printCopy(destFileName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[CP] ", ConsoleColor.Gray, $"{destFileName}");
-                    copyFile(file, destFileName, false);
+                    FileOps.CopyFile(file.FullName, destFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(destFileName)) > 0)
                 {
                     //printOverwrite(destFileName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, "[OVRWRT] ", ConsoleColor.Gray, $"{destFileName}");
-                    copyFile(file, destFileName, true);
+                    FileOps.CopyFile(file.FullName, destFileName, true);
                 }
             }
         }
@@ -169,13 +169,13 @@ namespace FileUtils {
                 {
                     //printCopy(srcFileName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[CP] ", ConsoleColor.Gray, $"{srcFileName}");
-                    copyFile(file, srcFileName, false);
+                    FileOps.CopyFile(file.FullName, srcFileName, false);
                 }
                 else if (DateTime.Compare(File.GetLastWriteTime(file.FullName), File.GetLastWriteTime(srcFileName)) > 0)
                 {
                     //printOverwrite(srcFileName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Green, "[CP] ", ConsoleColor.Gray, $"{srcFileName}");
-                    copyFile(file, srcFileName, true);
+                    FileOps.CopyFile(file.FullName, srcFileName, true);
                 }
             }
         }
@@ -191,7 +191,7 @@ namespace FileUtils {
                 {
                     //printDelete(file.FullName);
                     ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[DEL] ", ConsoleColor.Gray, $"{file.FullName}");
-                    deleteFile(file.FullName);
+                    FileOps.DeleteFile(file.FullName);
                 }
             }
 
@@ -228,32 +228,6 @@ namespace FileUtils {
             try
             {
                 Directory.Delete(dirName);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Copy File
-        private void copyFile(FileInfo file, string fileName, bool overwrite)
-        {
-            try
-            {
-                file.CopyTo(fileName, overwrite);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Delete File
-        private void deleteFile(string fileName)
-        {
-            try
-            {
-                File.Delete(fileName);
             }
             catch (Exception e)
             {
