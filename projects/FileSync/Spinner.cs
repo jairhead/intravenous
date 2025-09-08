@@ -58,7 +58,7 @@ namespace TerminalUtils
             if (active)
             {
                 active = false;
-                ConsoleLogger.WriteLine(ConsoleColor.Red, "[>_<]");
+                ConsoleLogger.WriteLine(ConsoleColor.Red, "[>.<]");
             }
         }
 
