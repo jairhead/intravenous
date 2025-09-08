@@ -32,14 +32,33 @@ namespace TerminalUtils
             }
         }
 
-        // Stop animation
-        public void stop()
+        // Stop animation (good)
+        public void stopGood()
         {
             if (active)
             {
                 active = false;
-                draw('X', ConsoleColor.Red);
-                ConsoleLogger.WriteLine();
+                ConsoleLogger.WriteLine(ConsoleColor.Green, "[^_^]");
+            }
+        }
+
+        // Stop animation (interrupt)
+        public void stopInterrupt()
+        {
+            if (active)
+            {
+                active = false;
+                ConsoleLogger.WriteLine(ConsoleColor.Yellow, "[T_T]");
+            }
+        }
+
+        // Stop animation (bad)
+        public void stopBad()
+        {
+            if (active)
+            {
+                active = false;
+                ConsoleLogger.WriteLine(ConsoleColor.Red, "[>_<]");
             }
         }
 

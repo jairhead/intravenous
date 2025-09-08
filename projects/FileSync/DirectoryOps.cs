@@ -59,7 +59,7 @@ namespace FileUtils
                 }
             }
         }
-        
+
         // Delete Directory
         public static void DeleteDirectory(string dirName)
         {
