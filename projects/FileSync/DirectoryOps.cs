@@ -29,7 +29,7 @@ namespace FileUtils
         }
 
         // Make directory
-        public static void MakeDirectory(string dir)
+        public static void CreateDirectory(string dir)
         {
             lock (__directoryLock)
             {

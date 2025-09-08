@@ -76,10 +76,10 @@ namespace FileUtils
                 printCopy(destName);
                 FileOps.CopyFile(e.FullPath, destName, false);
             }
-            else if (isDirectory(e.FullPath))
+            else if (DirectoryOps.IsDirectory(e.FullPath))
             {
                 printMakeDir(destName);
-                createDirectory(destName);
+                DirectoryOps.CreateDirectory(destName);
             }
         }
 
@@ -94,10 +94,10 @@ namespace FileUtils
                 FileOps.RenameFile(oldDestName, newDestName);
                 renamedFile = true;
             }
-            else if (isDirectory(e.FullPath))
+            else if (DirectoryOps.IsDirectory(e.FullPath))
             {
                 printRename(oldDestName, newDestName);
-                renameDirectory(oldDestName, newDestName);
+                DirectoryOps.RenameDirectory(oldDestName, newDestName);
             }
         }
 
@@ -110,10 +110,10 @@ namespace FileUtils
                 printDelete(destName);
                 FileOps.DeleteFile(destName);
             }
-            else if (isDirectory(destName))
+            else if (DirectoryOps.IsDirectory(destName))
             {
                 printDelete(destName);
-                deleteDirectory(destName);
+                DirectoryOps.DeleteDirectory(destName);
             }
         }
 
@@ -121,75 +121,6 @@ namespace FileUtils
         private void OnError(object sender, ErrorEventArgs e)
         {
             throw new Exception(e.GetException().Message);
-        }
-
-        // Check if name is directory
-        private bool isDirectory(string name) {
-            try
-            {
-                if (Directory.Exists(name))
-                {
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-            return false;
-        }
-
-        // Make directory
-        private void createDirectory(string dir)
-        {
-            try
-            {
-                Directory.CreateDirectory(dir);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Rename directory
-        private void renameDirectory(string oldDir, string newDir)
-        {
-            try
-            {
-                Directory.Move(oldDir, newDir);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Delete directory
-        private void deleteDirectory(string dir)
-        {
-            DirectoryInfo directory = new DirectoryInfo(dir);
-            DirectoryInfo[] subdirectories = directory.GetDirectories("*.*", SearchOption.AllDirectories);
-            FileInfo[] files = directory.GetFiles("*.*", SearchOption.AllDirectories);
-
-            try
-            {
-                foreach (FileInfo file in files)
-                {
-                    FileOps.DeleteFile(file.FullName);
-                }
-
-                foreach (DirectoryInfo subdirectory in subdirectories)
-                {
-                    Directory.Delete(subdirectory.FullName);
-                }
-
-                Directory.Delete(dir);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
         }
 
         // Print copy
