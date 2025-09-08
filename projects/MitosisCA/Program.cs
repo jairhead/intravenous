@@ -162,7 +162,7 @@ class FileSync
         foreach (string line in banner)
         {
             ConsoleLogger.WriteLine(line);
-            Thread.Sleep(20);
+            Thread.Sleep(40);
         }
     }
 
@@ -179,10 +179,11 @@ class FileSync
             "  src: source folder / directory (required)      ",
             "  dest: destination folder / directory (required)"
         };
-        
+
         foreach (string line in usage)
         {
             ConsoleLogger.WriteLine(line);
+            Thread.Sleep(40);
         }
     }
 }
