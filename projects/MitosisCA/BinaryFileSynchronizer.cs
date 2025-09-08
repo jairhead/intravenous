@@ -79,25 +79,25 @@ namespace FileUtils {
         public override void copy()
         {
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START COPY] ",
-                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
+                                            ConsoleColor.Gray, $"{src.FullName} --> {dest.FullName}");
 
             copyForward();
 
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH COPY] ",
-                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
+                                            ConsoleColor.Gray, $"{src.FullName} --> {dest.FullName}");
         }
 
         // Replicate (destructive copy) src -> dest
         public override void replicate()
         {
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[START REPLICATE] ",
-                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
+                                            ConsoleColor.Gray, $"{src.FullName} --> {dest.FullName}");
 
             copyForward();
             deleteBackward();
 
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Cyan, "[FINISH REPLICATE] ",
-                                            ConsoleColor.Gray, $"{src.FullName} <-> {dest.FullName}");
+                                            ConsoleColor.Gray, $"{src.FullName} --> {dest.FullName}");
         }
 
         // Copy files src -> dest
