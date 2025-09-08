@@ -34,7 +34,7 @@ class FileSync
         }
         catch (Exception e)
         {
-            error(e);
+            ConsoleLogger.Error(e);
             exit(1);
         }
 
@@ -60,7 +60,7 @@ class FileSync
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -74,7 +74,7 @@ class FileSync
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
 
             while (true)
@@ -158,15 +158,9 @@ class FileSync
 
         foreach (string line in banner)
         {
-            Console.WriteLine(line);
+            ConsoleLogger.WriteLine(line);
             Thread.Sleep(20);
         }
-    }
-
-    // Error
-    static void error(Exception e)
-    {
-        ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[ERROR] ", ConsoleColor.Gray, $"{e.Message}");
     }
 
     // Exit
