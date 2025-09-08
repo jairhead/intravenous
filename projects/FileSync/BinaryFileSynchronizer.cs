@@ -218,7 +218,7 @@ namespace FileUtils {
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -231,7 +231,7 @@ namespace FileUtils {
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -244,7 +244,7 @@ namespace FileUtils {
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -257,7 +257,7 @@ namespace FileUtils {
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -363,13 +363,6 @@ namespace FileUtils {
                 return true;
             }
             return false;
-        }
-
-        // Error
-        private void error(Exception e)
-        {
-            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Red, "[ERROR] ",
-                                            ConsoleColor.Gray, $"{e.Message}");
         }
     }
 }

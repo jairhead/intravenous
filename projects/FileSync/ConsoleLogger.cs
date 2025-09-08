@@ -80,6 +80,13 @@ namespace FileUtils
             }
         }
 
+        // Error
+        public static void Error(Exception e)
+        {
+            WriteTwoColorLine(ConsoleColor.Red, "[ERROR] ",
+                              ConsoleColor.Gray, $"{e.Message}");
+        }
+
         // Reset cursor position
         private static void resetCursor()
         {
