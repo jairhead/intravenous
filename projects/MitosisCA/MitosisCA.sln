@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSync", "FileSync.csproj", "{CD13784E-6EE1-A60F-2F5E-E6223BBA1FA3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitosisCA", "MitosisCA.csproj", "{CD13784E-6EE1-A60F-2F5E-E6223BBA1FA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
