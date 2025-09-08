@@ -11,8 +11,6 @@ namespace TerminalUtils
         // Members
         private const string sequence = @"/-\|";
         private int counter = 0;
-        private int left;
-        private int top;
         private readonly int delay;
         private bool active;
         private readonly Thread thread;
@@ -52,7 +50,6 @@ namespace TerminalUtils
         {
             while (active)
             {
-                //top = Console.GetCursorPosition().Top;
                 turn();
                 Thread.Sleep(delay);
             }
@@ -61,9 +58,6 @@ namespace TerminalUtils
         // Draw a character
         private void draw(char c, ConsoleColor color)
         {
-            /*Console.SetCursorPosition(left, top);
-            Console.ForegroundColor = color;
-            Console.Write($"[{c}]");*/
             ConsoleLogger.Write(color, $"[{c}]");
         }
 
