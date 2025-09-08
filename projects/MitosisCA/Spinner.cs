@@ -75,7 +75,7 @@ namespace TerminalUtils
         // Turn the spinner
         private void turn()
         {
-            ConsoleLogger.Write(ConsoleColor.White, $"[{sequence[++counter % sequence.Length]}]");
+            ConsoleLogger.Write(ConsoleColor.Cyan, $"[{sequence[++counter % sequence.Length]}]");
         }
     }
 }
