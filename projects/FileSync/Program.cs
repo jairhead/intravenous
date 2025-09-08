@@ -131,16 +131,9 @@ class FileSync
             replicate = true;
         }
 
-        if (parser.hasArg("-f") && copy)
+        if (parser.hasArg("-f"))
         {
-            Dictionary<string, string> providedPatterns = parser.getArgs();
-            foreach (KeyValuePair<string, string> pattern in providedPatterns)
-            {
-                if (pattern.Key.Contains("-f"))
-                {
-                    searchPatterns.Add(pattern.Value);
-                }
-            }
+            
         }
 
         return;
