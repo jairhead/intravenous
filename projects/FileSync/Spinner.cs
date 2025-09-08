@@ -38,7 +38,7 @@ namespace TerminalUtils
             if (active)
             {
                 active = false;
-                ConsoleLogger.WriteLine(ConsoleColor.Green, "[^_^]");
+                ConsoleLogger.WriteLine(ConsoleColor.Green, "(^_^)");
             }
         }
 
@@ -48,7 +48,7 @@ namespace TerminalUtils
             if (active)
             {
                 active = false;
-                ConsoleLogger.WriteLine(ConsoleColor.Yellow, "[T_T]");
+                ConsoleLogger.WriteLine(ConsoleColor.Yellow, "(-_-)");
             }
         }
 
@@ -58,7 +58,7 @@ namespace TerminalUtils
             if (active)
             {
                 active = false;
-                ConsoleLogger.WriteLine(ConsoleColor.Red, "[>.<]");
+                ConsoleLogger.WriteLine(ConsoleColor.Red, "(>_<)");
             }
         }
 
@@ -75,7 +75,7 @@ namespace TerminalUtils
         // Turn the spinner
         private void turn()
         {
-            ConsoleLogger.Write(ConsoleColor.Blue, $"[{sequence[++counter % sequence.Length]}]");
+            ConsoleLogger.Write(ConsoleColor.White, $"[{sequence[++counter % sequence.Length]}]");
         }
     }
 }

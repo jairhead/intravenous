@@ -1,6 +1,7 @@
 // BaseArgumentParser.cs
 // Contains the BaseArgumentParser class
 using System;
+using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 
 namespace ArgumentParsers
@@ -11,7 +12,7 @@ namespace ArgumentParsers
         protected Dictionary<string, string> args = new Dictionary<string, string>();
         protected string[] input;
         protected string allowedArgs;
-
+        protected bool help = false;
 
         // Constructor
         public BaseArgumentParser(string[] inputArgs, string whiteList)
@@ -30,7 +31,12 @@ namespace ArgumentParsers
 
             for (int i = 0; i < input.Length; i++)
             {
-                if (input[i].Contains('-') && allowedArgs.Contains(input[i].Remove(0, 1)) &&
+                if (input[i].Contains("-h"))
+                {
+                    help = true;
+                    break;
+                }
+                else if (input[i].Contains('-') && allowedArgs.Contains(input[i].Remove(0, 1)) &&
                     allowedArgs.Contains(input[i].Remove(0, 1) + ":") &&
                     checkArgVal(input, i))
                 {
@@ -97,6 +103,12 @@ namespace ArgumentParsers
         public string getVal(string key)
         {
             return args[key];
+        }
+
+        // Need help
+        public bool needHelp()
+        {
+            return help;
         }
     }
 }

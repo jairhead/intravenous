@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO.Pipes;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using FileUtils;
 namespace ArgumentParsers
 {
     public class FileSyncArgumentParser : BaseArgumentParser
@@ -22,18 +23,29 @@ namespace ArgumentParsers
         // Overloadable extractArgs method
         public void parseArgs()
         {
-            if (input.Length == 0)
+            base.parseArgs();
+
+            if (help == true)
+            {
+                return;
+            }
+            else if (input.Length < 2)
             {
                 throw new ArgumentException("Source and destination directories must be provided!");
             }
-
-            base.parseArgs();
+            else if (!DirectoryOps.IsDirectory(input[input.Length - 2]))
+            {
+                throw new ArgumentException("Destination directory must be provided!");
+            }
+            else if (!DirectoryOps.IsDirectory(input[input.Length - 1]))
+            {
+                throw new ArgumentException("Source directory must be provided!");
+            }
 
             try
             {
                 setSrc(input[input.Length - 2]);
                 setDest(input[input.Length - 1]);
-
             }
             catch (Exception)
             {

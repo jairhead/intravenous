@@ -22,11 +22,18 @@ class FileSync
     {
         // Setup
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.CancelKeyPress += new ConsoleCancelEventHandler(cancelHandler);
-        printBanner();
+        Console.CancelKeyPress += new ConsoleCancelEventHandler(cancel);
+        banner();
 
         // Gather Input Args
-        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdsrf:");
+        if (args.Length == 0)
+        {
+            usage();
+            Environment.Exit(0);
+        }
+
+        FileSyncArgumentParser parser = new FileSyncArgumentParser(args, "cdhsrf:");
+
         try
         {
             parser.parseArgs();
@@ -35,7 +42,14 @@ class FileSync
         catch (Exception e)
         {
             ConsoleLogger.Error(e);
+            usage();
             Environment.Exit(1);
+        }
+
+        if (parser.needHelp())
+        {
+            usage();
+            Environment.Exit(0);
         }
 
         // Perform Initial Operation
@@ -133,14 +147,14 @@ class FileSync
     }
 
     // Interrupt handler
-    static void cancelHandler(object sender, ConsoleCancelEventArgs args)
+    static void cancel(object sender, ConsoleCancelEventArgs args)
     {
         s.stopInterrupt();
         Environment.Exit(0);
     }
 
     // Print the banner for the program
-    static void printBanner()
+    static void banner()
     {
         List<string> banner = new List<string>
         {
@@ -161,6 +175,26 @@ class FileSync
         {
             ConsoleLogger.WriteLine(line);
             Thread.Sleep(20);
+        }
+    }
+
+    // Print usage
+    static void usage()
+    {
+        List<string> usage = new List<string>
+        {
+            "Usage: program [-c | -s | -r] [-d] src dest      ",
+            "  -c: copy files from src to dest                ",
+            "  -s: synchronize src and dest (constructive)    ",
+            "  -r: replicate src to dest (destructive copy)   ",
+            "  -d: run daemon mode                            ",
+            "  src: source folder / directory (required)      ",
+            "  dest: destination folder / directory (required)"
+        };
+        
+        foreach (string line in usage)
+        {
+            ConsoleLogger.WriteLine(line);
         }
     }
 }
