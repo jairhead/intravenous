@@ -9,7 +9,7 @@ namespace FileUtils
         private static object __fileLock = new object();
 
         // Check if is file
-        public static bool isFile(string name)
+        public static bool IsFile(string name)
         {
             lock (__fileLock)
             {
@@ -29,7 +29,7 @@ namespace FileUtils
         }
 
         // Copy file
-        public static void copyFile(string srcFile, string destFile, bool overwrite)
+        public static void CopyFile(string srcFile, string destFile, bool overwrite)
         {
             lock (__fileLock)
             {
@@ -45,7 +45,7 @@ namespace FileUtils
         }
 
         // Rename file
-        public static void renameFile(string oldFile, string newFile)
+        public static void RenameFile(string oldFile, string newFile)
         {
             lock (__fileLock)
             {
@@ -61,7 +61,7 @@ namespace FileUtils
         }
 
         // Delete file
-        public static void deleteFile(string file)
+        public static void DeleteFile(string file)
         {
             lock (__fileLock)
             {

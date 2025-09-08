@@ -56,12 +56,12 @@ namespace FileUtils
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(e.FullPath) && !renamedFile)
+            if (FileOps.IsFile(e.FullPath) && !renamedFile)
             {
                 printOverwrite(destName);
-                copyFile(e.FullPath, destName, true);
+                FileOps.CopyFile(e.FullPath, destName, true);
             }
-            else if (isFile(e.FullPath))
+            else if (FileOps.IsFile(e.FullPath))
             {
                 renamedFile = false;
             }
@@ -71,10 +71,10 @@ namespace FileUtils
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(e.FullPath))
+            if (FileOps.IsFile(e.FullPath))
             {
                 printCopy(destName);
-                copyFile(e.FullPath, destName, false);
+                FileOps.CopyFile(e.FullPath, destName, false);
             }
             else if (isDirectory(e.FullPath))
             {
@@ -88,10 +88,10 @@ namespace FileUtils
         {
             string oldDestName = destination + e.OldFullPath.Substring(source.Length);
             string newDestName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(e.FullPath))
+            if (FileOps.IsFile(e.FullPath))
             {
                 printRename(oldDestName, newDestName);
-                renameFile(oldDestName, newDestName);
+                FileOps.RenameFile(oldDestName, newDestName);
                 renamedFile = true;
             }
             else if (isDirectory(e.FullPath))
@@ -105,10 +105,10 @@ namespace FileUtils
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
             string destName = destination + e.FullPath.Substring(source.Length);
-            if (isFile(destName))
+            if (FileOps.IsFile(destName))
             {
                 printDelete(destName);
-                deleteFile(destName);
+                FileOps.DeleteFile(destName);
             }
             else if (isDirectory(destName))
             {
@@ -121,23 +121,6 @@ namespace FileUtils
         private void OnError(object sender, ErrorEventArgs e)
         {
             throw new Exception(e.GetException().Message);
-        }
-
-        // Check if name is file
-        private bool isFile(string name)
-        {
-            try
-            {
-                if (File.Exists(name))
-                {
-                    return true;
-                }
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-            return false;
         }
 
         // Check if name is directory
@@ -193,7 +176,7 @@ namespace FileUtils
             {
                 foreach (FileInfo file in files)
                 {
-                    deleteFile(file.FullName);
+                    FileOps.DeleteFile(file.FullName);
                 }
 
                 foreach (DirectoryInfo subdirectory in subdirectories)
@@ -202,45 +185,6 @@ namespace FileUtils
                 }
 
                 Directory.Delete(dir);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Copy file
-        private void copyFile(string srcFile, string destFile, bool overwrite)
-        {
-            try
-            {
-                File.Copy(srcFile, destFile, overwrite);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Rename file
-        private void renameFile(string oldFile, string newFile)
-        {
-            try
-            {
-                File.Move(oldFile, newFile);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
-            }
-        }
-
-        // Delete file
-        private void deleteFile(string file)
-        {
-            try
-            {
-                File.Delete(file);
             }
             catch (Exception e)
             {
