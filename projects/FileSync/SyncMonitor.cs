@@ -135,7 +135,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
             return false;
         }
@@ -151,7 +151,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
             return false;
         }
@@ -165,7 +165,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -178,7 +178,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -205,7 +205,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -218,7 +218,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -231,7 +231,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -244,7 +244,7 @@ namespace FileUtils
             }
             catch (Exception e)
             {
-                error(e);
+                ConsoleLogger.Error(e);
             }
         }
 
@@ -286,13 +286,6 @@ namespace FileUtils
             DateTime t = DateTime.Now;
             ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, $"[DEL | {t}] ",
                                             ConsoleColor.Gray, $"{name}");
-        }
-        
-        // Error
-        private void error(Exception e)
-        {
-            ConsoleLogger.WriteTwoColorLine(ConsoleColor.Yellow, $"[ERROR] ",
-                                            ConsoleColor.Gray, $"{e.Message}");
         }
     }
 }
