@@ -63,13 +63,16 @@ namespace FileUtils
         // Delete Directory
         public static void DeleteDirectory(string dirName)
         {
-            try
+            lock (__directoryLock)
             {
-                Directory.Delete(dirName);
-            }
-            catch (Exception e)
-            {
-                ConsoleLogger.Error(e);
+                try
+                {
+                    Directory.Delete(dirName);
+                }
+                catch (Exception e)
+                {
+                    ConsoleLogger.Error(e);
+                }
             }
         }
 
