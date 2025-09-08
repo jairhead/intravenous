@@ -180,7 +180,7 @@ class FileSync
     {
         List<string> usage = new List<string>
         {
-            "Usage: program [-c | -s | -r] [-d] src dest      ",
+            "Usage: MitosisCA.exe [-c | -s | -r] [-d] src dest",
             "  -c: copy files from src to dest                ",
             "  -s: synchronize src and dest (constructive)    ",
             "  -r: replicate src to dest (destructive copy)   ",
