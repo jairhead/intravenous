@@ -37,7 +37,7 @@ class FileSync
         try
         {
             parser.parseArgs();
-            setFlags(parser);
+            flags(parser);
         }
         catch (Exception e)
         {
@@ -53,7 +53,10 @@ class FileSync
         }
 
         // Perform Initial Operation
+        DateTime start = DateTime.Now;
+        ConsoleLogger.WriteTwoColorLine(ConsoleColor.Blue, "[START TIME] ", ConsoleColor.Gray, $"{start}");
         s.start();
+
         if (copy || sync || replicate)
         {
             try
@@ -77,6 +80,12 @@ class FileSync
                 ConsoleLogger.Error(e);
             }
         }
+
+        DateTime finish = DateTime.Now;
+        ConsoleLogger.WriteTwoColorLine(ConsoleColor.Blue, "[FINISH TIME] ", ConsoleColor.Gray, $"{finish}");
+
+        TimeSpan elapsed = finish - start;
+        ConsoleLogger.WriteTwoColorLine(ConsoleColor.Blue, "[ELAPSED TIME] ", ConsoleColor.Gray, $"{elapsed}");
 
         // Daemon Mode
         if (runDaemon)
@@ -103,7 +112,7 @@ class FileSync
     }
 
     // Helper method for setting program flags
-    static void setFlags(FileSyncArgumentParser parser)
+    static void flags(FileSyncArgumentParser parser)
     {
         if (parser.hasArg("-c"))
         {
